@@ -1,0 +1,60 @@
+========================================================================
+                      BADSUPDEV - KULLANIM KILAVUZU
+========================================================================
+
+Bu klasör, BadSupDev FiveM Platformu'nun tam donanımlı, dinamik ve 
+yönetim panelli masaüstü sürümüdür.
+
+------------------------------------------------------------------------
+1. TEK TIKLA BAŞLATMA
+------------------------------------------------------------------------
+- Klasör içerisindeki "baslat.bat" dosyasına çift tıklayın.
+- Web sunucusu (server.py) otomatik başlar ve varsayılan tarayıcınızda 
+  http://localhost:3000 sayfasını anında açar.
+- Ya da terminalden: python server.py çalıştırabilirsiniz.
+
+------------------------------------------------------------------------
+2. ANA SAYFA & MARKET
+------------------------------------------------------------------------
+- Adres: http://localhost:3000
+- Discord Giriş: Sağ üstteki "Discord Giriş" butonuna tıklayarak Discord 
+  hesabınızı bağlayıp doğrulayabilirsiniz.
+- Bakiye Yükleme: "Bakiye Yükle" butonuna tıklayarak Shopier üzerinden 
+  en az 10 TL olmak üzere dilediğiniz tutarda bakiye yükleyebilirsiniz.
+  (Canlı Shopier API entegrasyonu dinamik dijital ürün oluşturur)
+- Market: YouTube ve TikTok videolarının yerine gelen Market bölümünden 
+  bakiyenizle Single Slot, Duo Slot, Team Build veya Spoofer satın 
+  alabilirsiniz. Satın alımda anında benzersiz lisans anahtarı üretilir.
+- Hareketli Marquee: Yalnızca Shopier, IBAN ve FAST ödeme yöntemleri yer alır.
+- Menü Simülasyonu: 85 özellikli BadSupDev FiveM hile menüsü canlı test edilebilir.
+- Satın Almadan Önce: BadSupDev güvenceleri ve teknik detayları yer alır.
+
+------------------------------------------------------------------------
+3. GİZLİ YÖNETİCİ PANELİ (ADMIN)
+------------------------------------------------------------------------
+- Sitede linki bulunmaz, gizlidir.
+- Adres: http://localhost:3000/admin (veya admin.html)
+- Giriş Bilgileri:
+    Kullanıcı Adı : BadSupDev
+    Şifre         : bAdSupDev^24)312
+
+Panel Yetenekleri:
+- Market Ürünleri: Yeni ürün ekleme, fiyat/stok/rozet/açıklama düzenleme, silme.
+- Kullanıcı Bakiye: Kayıtlı Discord kullanıcılarını görüntüleme, bakiye ekleme/ayarlama.
+- Sipariş & Key Logları: Üretilen lisans anahtarları ve yükleme kayıtlarını listeleme.
+- Dashboard KPI: Toplam ürün, kullanıcı, sipariş ve Shopier bağlantı durumu.
+
+------------------------------------------------------------------------
+4. DOSYA YAPISI
+------------------------------------------------------------------------
+- index.html        : BadSupDev ana web sayfası
+- admin.html        : Gizli ve şifreli yönetim paneli
+- server.py         : Python tabanlı HTTP & REST API sunucusu
+- db.json           : Ürünler, kullanıcı bakiyeleri ve sipariş veritabanı
+- astrid.js         : Market, Discord auth, Shopier entegrasyonu & menü simülatörü
+- brand-mark.png    : BadSupDev şeffaf arka planlı resmi logosu
+- brand-banner.png  : BadSupDev özel karanlık tema banner görseli
+- baslat.bat        : Tek tıkla çalıştırma scripti
+- _next/            : Orijinal tema stilleri ve assetler
+
+========================================================================

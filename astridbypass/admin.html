@@ -1,0 +1,2934 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BadSupDev — Yönetim Paneli</title>
+  <link rel="icon" href="./brand-mark.png"/>
+  <style>
+    :root {
+      --bg: #0d0d0f;
+      --card-bg: #141417;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.12);
+      --accent: #5865F2;
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.45);
+      --danger: #ef4444;
+      --success: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* Utilities */
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-center { justify-content: center; }
+    .gap-2 { gap: 8px; }
+    .gap-3 { gap: 12px; }
+    .gap-4 { gap: 16px; }
+
+    /* Glowing Background */
+    .bg-glow {
+      position: fixed;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Cards */
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Login Screen */
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      background: #141416;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      object-fit: contain;
+    }
+    .form-group {
+      text-align: left;
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: #0f0f11;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .btn-block { width: 100%; }
+    .btn-primary {
+      background: #ffffff;
+      color: #000000;
+    }
+    .btn-primary:hover {
+      background: #e6e6e6;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.22);
+    }
+    .btn-success {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .btn-success:hover {
+      background: rgba(16, 185, 129, 0.22);
+    }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+
+    /* Header */
+    .top-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0 28px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 28px;
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+    .badge-accent {
+      background: rgba(88, 101, 242, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(88, 101, 242, 0.3);
+    }
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 8px 0 4px;
+      color: #fff;
+    }
+    .stat-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 12px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: #111114;
+      padding: 14px 18px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+    }
+    td {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.85);
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+    .modal-box {
+      background: #161619;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 540px;
+      padding: 28px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 14px;
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .close-btn:hover { color: #fff; }
+
+    /* Alert Banner */
+    .alert-error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    select, select option {
+      background-color: #1a1a24 !important;
+      color: #ffffff !important;
+      color-scheme: dark !important;
+    }
+    input, textarea {
+      color-scheme: dark !important;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-wrapper">
+    <div class="login-box">
+      <img src="./brand-mark.png" alt="BadSupDev" class="login-logo"/>
+      <h1 style="font-size: 22px; font-weight: 700;">BadSupDev Yönetim</h1>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Güvenli Yönetici Girişi</p>
+
+      <form id="login-form" style="margin-top: 26px;">
+        <div id="login-error" class="alert-error hidden"></div>
+
+        <div class="form-group">
+          <label class="form-label">Kullanıcı Adı</label>
+          <input type="text" id="admin-user" class="form-input" placeholder="BadSupDev" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Şifre</label>
+          <div style="position: relative;">
+            <input type="password" id="admin-pass" class="form-input" placeholder="••••••••••••" required style="padding-right: 42px;" />
+            <button type="button" id="toggle-pass-visibility-btn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: rgba(255,255,255,0.7); cursor: pointer; padding: 4px; font-size: 15px; user-select: none;" title="Şifreyi Göster / Gizle">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Giriş Yap &rarr;</button>
+      </form>
+
+      <div style="margin-top: 22px;">
+        <a href="./index.html" style="font-size: 12px; color: var(--text-muted);">&larr; Ana Sayfaya Dön</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <div id="dashboard-screen" class="container hidden">
+    <!-- Top Nav -->
+    <header class="top-nav">
+      <div class="brand-title">
+        <img src="./brand-mark.png" alt="" style="width: 34px; height: 34px; object-fit: contain;"/>
+        <div>
+          <span>BadSupDev</span>
+          <span class="badge badge-accent" style="margin-left: 8px;">Admin v2.0</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="./index.html" target="_blank" class="btn btn-secondary btn-sm">&nearr; Mağazayı Gör</a>
+        <button id="btn-cleanup-shopier" class="btn btn-secondary btn-sm" style="margin-right: 8px;">🧹 Shopier Geçici Ürünlerini Temizle</button>
+        <button id="logout-btn" class="btn btn-danger btn-sm">Çıkış Yap</button>
+      </div>
+    </header>
+
+    <!-- KPI Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Toplam Ürün</div>
+        <div class="stat-value" id="stat-products">0</div>
+        <div class="stat-hint">Market listesinde aktif</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Kayıtlı Kullanıcı</div>
+        <div class="stat-value" id="stat-users">0</div>
+        <div class="stat-hint">Discord ile bağlananlar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Toplam Sipariş / Key</div>
+        <div class="stat-value" id="stat-orders">0</div>
+        <div class="stat-hint">Başarılı bakiye & key üretimi</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Shopier API Entegrasyonu</div>
+        <div class="stat-value" style="font-size: 20px; color: #34d399; margin-top: 14px;">AKTİF</div>
+        <div class="stat-hint">Mağaza ID: #3022600</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-btn-products">🛍️ Market Ürünleri</button>
+      <button class="tab-btn" id="tab-btn-users">👥 Kullanıcılar & Bakiye</button>
+      <button class="tab-btn" id="tab-btn-orders">📜 Sipariş & Key Geçmişi</button>
+      <!-- Giveaways Removed -->
+      <button class="tab-btn" id="tab-btn-tickets" style="background: rgba(59, 130, 246, 0.12); color: #60a5fa; border-color: rgba(59, 130, 246, 0.3);">🎫 Destek Talepleri</button>
+      <button class="tab-btn" id="tab-btn-lookup" style="background: rgba(16, 185, 129, 0.12); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">🔍 Key Sorgulama</button>
+    </div>
+
+    <!-- TAB 1: ÜRÜNLER -->
+    <div id="tab-content-products">
+      <div class="flex items-center justify-between" style="margin-bottom: 16px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700;">Market Ürün Yönetimi</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Kullanıcıların sitede göreceği ve bakiye ile satın alabileceği ürünler.</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-export-products" class="btn btn-secondary btn-sm" title="Tüm ürünleri JSON olarak panoya kopyalar">📋 JSON Kopyala</button>
+          <button id="open-add-product-btn" class="btn btn-primary btn-sm">+ Yeni Ürün Ekle</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Ürün Adı</th>
+              <th>Kategori</th>
+              <th>Fiyat</th>
+              <th>Dönem</th>
+              <th>Rozet</th>
+              <th>Stok</th>
+              <th style="text-align: right;">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 2: KULLANICILAR -->
+    <div id="tab-content-users" class="hidden">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <h2 style="font-size: 18px; font-weight: 700;">Kullanıcı & Bakiye Yönetimi</h2>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Discord ile bağlanan kullanıcıların mevcut bakiyelerini inceleyin veya düzenleyin.</p>
+        </div>
+
+        <!-- Search Bar by Username and Discord ID & Direct Bakiye Yükle Button -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button type="button" id="btn-direct-add-balance" class="btn btn-success" style="padding: 9px 16px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+            <span>➕</span> Bakiye Yükle
+          </button>
+          <div style="position: relative; width: 320px;">
+            <input type="text" id="user-search-input" class="form-input" placeholder="🔍 Ad veya Discord ID ile ara..." style="padding-left: 36px; padding-right: 30px; font-size: 13px;" />
+            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5;">🔍</span>
+            <button type="button" id="user-search-clear-btn" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #fff; opacity: 0.5; cursor: pointer; display: none; font-size: 16px;">&times;</button>
+          </div>
+          <span id="user-search-count-badge" class="badge badge-accent" style="font-size: 11px; white-space: nowrap;">0 Kullanıcı</span>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Discord Kullanıcı</th>
+              <th>Discord ID</th>
+              <th>Mevcut Bakiye</th>
+              <th>Satın Alınan Ürünler</th>
+              <th style="text-align: right; min-width: 230px;">Para İşlemleri (Ekle / Çıkar)</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB 3: SİPARİŞLER -->
+    <div id="tab-content-orders" class="hidden">
+      <div style="margin-bottom: 16px;">
+        <h2 style="font-size: 18px; font-weight: 700;">Sipariş & Key Teslimat Logları</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Üretilen tüm lisans anahtarları ve Shopier bakiye yüklemeleri.</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Sipariş No</th>
+              <th>Tarih</th>
+              <th>Kullanıcı</th>
+              <th>İşlem Türü</th>
+              <th>Tutar</th>
+              <th>Lisans Key</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <!-- TAB 4: KEY SORGULAMA -->
+    <div id="tab-content-lookup" class="hidden">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 18px; font-weight: 700;">🔍 Lisans & Ürün Key Sorgulama (Ticket Kontrol)</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Müşteri Discord ticket üzerinden ürün lisans kodunu attığında buraya yapıştırıp hangi ürünü, ne zaman, kimin aldığını anında sorgulayın.</p>
+      </div>
+
+      <!-- Search Box Card -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <input type="text" id="lookup-key-input" class="form-input" style="flex: 1; min-width: 280px; font-size: 15px; font-family: monospace; letter-spacing: 1px;" placeholder="BADSUP-XXXX-XXXX-XXXX veya Sipariş No (Örn: KEY-...)" />
+          <button id="lookup-btn" class="btn btn-primary" style="padding: 12px 24px; white-space: nowrap;">🔍 Key Sorgula</button>
+        </div>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span style="font-weight: 600;">Son Satın Alınan Keyler:</span>
+          <div id="lookup-chips-list" style="display: inline-flex; gap: 8px; flex-wrap: wrap;"></div>
+        </div>
+      </div>
+
+      <!-- Result Card Container -->
+      <div id="lookup-result-container" class="hidden"></div>
+    </div>
+
+    <!-- TAB 6: DESTEK TALEPLERİ -->
+    <div id="tab-content-tickets" class="hidden">
+      <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 46px; height: 46px; border-radius: 16px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.35); display: flex; align-items: center; justify-content: center; color: #60a5fa; box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);">
+            <svg style="width: 24px; height: 24px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h2 style="font-size: 19px; font-weight: 800; color: #fff; margin: 0;">Destek Talepleri & Canlı Sohbet</h2>
+              <span id="tickets-count-badge" class="badge badge-accent" style="font-size: 11px; padding: 4px 10px; font-weight: 700;">0 Talep</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Kullanıcıların canlı metin kanalı bildirimleri ve müşteri destek talepleri.</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Status Filter / Counters -->
+        
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+          <!-- Search & Filter Controls -->
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 260px; position: relative;">
+              <input type="text" id="admin-ticket-search-input" placeholder="Kullanıcı adı, Discord ID, Talep ID veya Konu ara..." style="width: 100%; padding: 10px 16px; border-radius: 12px; background: #18181f; border: 1px solid rgba(255,255,255,0.12); color: #fff; font-size: 12px; outline: none;" />
+            </div>
+            <div id="tickets-user-filter-tag" style="display: none; align-items: center; gap: 6px; background: rgba(59,130,246,0.18); border: 1px solid rgba(59,130,246,0.35); padding: 6px 12px; border-radius: 10px; font-size: 11px; color: #60a5fa;">
+              <span>Filtre: <b id="tickets-user-filter-name"></b></span>
+              <button type="button" id="btn-clear-ticket-user-filter" style="background: none; border: none; color: #fff; cursor: pointer; font-weight: 800; font-size: 13px;">&times;</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Status Filter / Counters (Clickable!) -->
+          <div id="tickets-summary-chips" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+        </div>
+  
+      </div>
+
+      <div class="table-container" style="background: #141419; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <table>
+          <thead>
+            <tr>
+              <th style="padding: 14px 18px;">Talep ID / Tarih</th>
+              <th style="padding: 14px 18px;">Kullanıcı Bilgisi</th>
+              <th style="padding: 14px 18px;">Kategori</th>
+              <th style="padding: 14px 18px;">Konu & Açıklama</th>
+              <th style="padding: 14px 18px;">Durum</th>
+              <th style="text-align: right; padding: 14px 18px;">İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="tickets-tbody">
+            <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 40px;">Talepler yükleniyor...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PRODUCT EDIT / ADD MODAL -->
+  <div id="product-modal" class="modal-backdrop hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title" style="font-size: 18px; font-weight: 700;">Yeni Ürün Ekle</h3>
+        <button id="close-modal-btn" class="close-btn">&times;</button>
+      </div>
+
+      <form id="product-form">
+        <input type="hidden" id="p-id" />
+
+        <div class="form-group">
+          <label class="form-label">Ürün Başlığı</label>
+          <input type="text" id="p-title" class="form-input" placeholder="Örn: Single Slot (Tek Kişi)" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Kategori</label>
+            <select id="p-cat" class="form-select">
+              <option value="Discord Botları">Discord Botları</option>
+              <option value="FiveM Scriptleri">FiveM Scriptleri</option>
+              <option value="FiveM Paketleri">FiveM Paketleri</option>
+              <option value="Web Tasarımları">Web Tasarımları</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fiyat (TL)</label>
+            <input type="number" id="p-price" class="form-input" min="1" step="any" placeholder="2000" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Süre / Dönem</label>
+            <input type="text" id="p-period" class="form-input" placeholder="Aylık / Tek Seferlik" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rozet (Badge)</label>
+            <input type="text" id="p-badge" class="form-input" placeholder="En Popüler / Yeni" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stok</label>
+            <input type="number" id="p-stock" class="form-input" value="50" min="0" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Açıklama</label>
+          <textarea id="p-desc" class="form-textarea" rows="2" placeholder="Kısa ürün açıklaması..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Özellikler (Her satıra bir özellik)</label>
+          <textarea id="p-features" class="form-textarea" rows="4" placeholder="85+ Aktif Özellik&#10;Full Stream Proof&#10;HWID Kilitli"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between" style="margin-top: 24px;">
+          <button type="button" id="cancel-modal-btn" class="btn btn-secondary">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DETAILED BALANCE MANAGEMENT MODAL -->
+  <div id="balance-modal" class="modal-backdrop hidden">
+    <div class="modal-box" style="max-width: 500px; background: #131317; border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; padding: 26px; box-shadow: 0 20px 50px rgba(0,0,0,0.85);">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h3 style="font-size: 19px; font-weight: 800; color: #fff;">Bakiye Yönetimi & Düzenleme</h3>
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">Kullanıcının cüzdan bakiyesini doğrudan belirleyin veya düzenleyin.</p>
+        </div>
+        <button id="close-balance-modal-btn" class="close-btn" style="background:none; border:none; color: rgba(255,255,255,0.4); font-size: 24px; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
+      </div>
+
+      <form id="balance-form">
+        <!-- User Selection & Direct Input Card -->
+        <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
+          <div style="margin-bottom: 10px;">
+            <label style="font-size: 12px; font-weight: 700; color: #fff; display: block; margin-bottom: 6px;">
+              👤 Hedef Kullanıcı Adı veya Discord ID:
+            </label>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <input type="text" id="b-user-input" class="form-input" placeholder="Kullanıcı Adı veya Discord ID yazın (Örn: j.joja)" required style="flex: 1; font-size: 14px; font-weight: 700; padding: 10px 14px; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: #fff;" />
+              <select id="b-user-dropdown" class="form-input" style="width: 170px; font-size: 12px; font-weight: 600; padding: 10px 8px; background: #16161a; border: 1px solid rgba(56,189,248,0.3); border-radius: 10px; color: #38bdf8;">
+                <option value="">-- Kayıtlı Seç --</option>
+              </select>
+            </div>
+            <input type="hidden" id="b-user" />
+            <input type="hidden" id="b-current-raw-val" value="0" />
+          </div>
+
+          <!-- User Info & Balance Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px 14px; margin-top: 8px;">
+            <div>
+              <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Algılanan Hesap</div>
+              <div id="b-user-display" style="font-size: 14px; font-weight: 700; color: #38bdf8; margin-top: 2px;">-</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Mevcut Bakiye</div>
+              <div id="b-current-balance-display" style="font-size: 16px; font-weight: 900; color: #34d399; margin-top: 2px;">0.00 ₺</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operation Mode Selection -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label class="form-label" style="font-size: 12px; font-weight: 700; margin-bottom: 8px; display: block;">İşlem Türü</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+            <button type="button" class="op-select-btn" id="op-btn-set" data-op="set" style="padding: 10px 8px; font-size: 12px; font-weight: 800; border-radius: 10px; border: 1px solid #10b981; background: rgba(16,185,129,0.18); color: #34d399; cursor: pointer; transition: all 0.2s;">
+              🎯 Doğrudan Belirle
+            </button>
+            <button type="button" class="op-select-btn" id="op-btn-add" data-op="add" style="padding: 10px 8px; font-size: 12px; font-weight: 600; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.8); cursor: pointer; transition: all 0.2s;">
+              ➕ Bakiyeye Ekle
+            </button>
+            <button type="button" class="op-select-btn" id="op-btn-sub" data-op="sub" style="padding: 10px 8px; font-size: 12px; font-weight: 600; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.8); cursor: pointer; transition: all 0.2s;">
+              ➖ Bakiyeden Düş
+            </button>
+          </div>
+          <input type="hidden" id="b-op" value="set" />
+        </div>
+
+        <!-- Amount Input -->
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label class="form-label" id="b-amount-label" style="font-size: 12px; font-weight: 700; margin-bottom: 6px; display: block; color: rgba(255,255,255,0.9);">
+            Yeni Bakiye Tutarı (TL) — Yazdığınız miktar kullanıcının yeni bakiyesi olur
+          </label>
+          <div style="position: relative;">
+            <input type="number" id="b-amount" class="form-input" min="0" step="any" placeholder="Örn: 2500" required style="width: 100%; font-size: 16px; font-weight: 800; padding: 12px 40px 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.5); color: #fff;" />
+            <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-weight: 800; color: #34d399;">₺</span>
+          </div>
+        </div>
+
+        <!-- Quick Amount Shortcuts -->
+        <div style="margin-bottom: 18px;">
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Hızlı Miktarlar:</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="quick-bal-btn" data-val="0" style="padding: 6px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; border: 1px solid rgba(239,68,68,0.3); background: rgba(239,68,68,0.12); color: #ef4444; cursor: pointer;">0 ₺ (Sıfırla)</button>
+            <button type="button" class="quick-bal-btn" data-val="100" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">100 ₺</button>
+            <button type="button" class="quick-bal-btn" data-val="500" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">500 ₺</button>
+            <button type="button" class="quick-bal-btn" data-val="1000" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">1.000 ₺</button>
+            <button type="button" class="quick-bal-btn" data-val="2500" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">2.500 ₺</button>
+            <button type="button" class="quick-bal-btn" data-val="5000" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">5.000 ₺</button>
+            <button type="button" class="quick-bal-btn" data-val="10000" style="padding: 6px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; cursor: pointer;">10.000 ₺</button>
+          </div>
+        </div>
+
+        <!-- Calculation Live Preview -->
+        <div style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); border-radius: 12px; padding: 12px 16px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: rgba(255,255,255,0.7);">İşlem Sonrası Yeni Bakiye:</span>
+          <span id="b-preview-balance" style="font-size: 16px; font-weight: 900; color: #34d399;">0.00 ₺</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+          <!-- One-Click Zero Balance Button -->
+          <button type="button" id="b-quick-reset-btn" class="btn btn-danger" style="font-size: 12px; font-weight: 700; padding: 11px 16px;">
+            🗑️ Bakiyeyi Sıfırla (0 ₺)
+          </button>
+          
+          <div style="display: flex; gap: 8px; margin-left: auto;">
+            <button type="button" id="cancel-balance-btn" class="btn btn-secondary" style="padding: 11px 16px;">İptal</button>
+            <button type="submit" id="b-submit-btn" class="btn btn-success" style="padding: 11px 22px; font-weight: 800; font-size: 13px;">
+              💾 Bakiyeyi Uygula
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+  
+  <!-- ========================================== -->
+  <!-- ADMIN LIVE TICKET CHAT MODAL               -->
+  <!-- ========================================== -->
+  <div id="admin-ticket-chat-modal" class="modal-backdrop hidden" onclick="if(event.target === this) closeAdminChatModal();" style="z-index: 150;">
+    <div class="modal-box" style="max-width: 860px; width: 95vw; height: 88vh; display: flex; flex-direction: column; padding: 24px; background: #121217; border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 24px; box-shadow: 0 30px 80px rgba(0,0,0,0.95), 0 0 50px rgba(59,130,246,0.15); position: relative; overflow: hidden;" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; gap: 14px; min-width: 0;">
+          <img id="admin-chat-user-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(59,130,246,0.5); object-fit: cover; flex-shrink: 0;" />
+          <div style="min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h3 id="admin-chat-ticket-subject" style="font-size: 16px; font-weight: 800; color: #fff; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 380px;">Destek Talebi</h3>
+              <span id="admin-chat-ticket-id" style="font-family: monospace; font-size: 11px; color: #60a5fa; background: rgba(59,130,246,0.12); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(59,130,246,0.25);">#TCK-00</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span>👤 <b id="admin-chat-user-name" style="color: #fff;">Kullanıcı</b></span>
+              <span>•</span>
+              <span style="font-family: monospace;" id="admin-chat-user-discordid">ID: -</span>
+              <span>•</span>
+              <span class="badge" id="admin-chat-category-badge" style="background: rgba(255,255,255,0.08); font-size: 11px;">Kategori</span>
+            </div>
+          </div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+          <span id="admin-chat-status-badge" class="badge" style="padding: 6px 14px; font-size: 11px; font-weight: 700; border-radius: 8px;">Açık</span>
+          
+          <button type="button" onclick="closeAdminChatModal()" class="btn btn-sm btn-secondary" style="padding: 7px 14px; font-size: 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff;">
+            <span>← Geri Dön</span>
+          </button>
+          
+          <button type="button" id="close-admin-chat-modal-btn" onclick="closeAdminChatModal()" class="close-btn" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.25)'; this.style.borderColor='rgba(239,68,68,0.4)';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.borderColor='rgba(255,255,255,0.15)';">&times;</button>
+        </div>
+      </div>
+
+      <!-- Quick Status Action Bar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 -24px; padding: 12px 24px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.06); flex-shrink: 0;">
+        <span style="color: var(--text-muted); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          <span>⚡ Hızlı Durum Değiştir:</span>
+        </span>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-sm btn-quick-status" data-status="Açık" style="background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); padding: 5px 12px; font-size: 11px; border-radius: 8px; cursor: pointer; font-weight: 600;">🟢 Açık</button>
+          <button type="button" class="btn btn-sm btn-quick-status" data-status="Duraklatıldı" style="background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); padding: 5px 12px; font-size: 11px; border-radius: 8px; cursor: pointer; font-weight: 600;">⏸️ Duraklat</button>
+          <button type="button" class="btn btn-sm btn-quick-status" data-status="Çözüldü" style="background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); padding: 5px 12px; font-size: 11px; border-radius: 8px; cursor: pointer; font-weight: 600;">✅ Çözüldü</button>
+          <button type="button" class="btn btn-sm btn-quick-status" data-status="Kapatıldı" style="background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); padding: 5px 12px; font-size: 11px; border-radius: 8px; cursor: pointer; font-weight: 600;">🔒 Kapat</button>
+        </div>
+      </div>
+
+      <!-- Messages Stream (Live Chat Thread) -->
+      
+      <!-- User's All Tickets Switcher Bar (Fix: If a user opened multiple tickets, switch seamlessly!) -->
+      <div id="admin-user-all-tickets-bar" style="display: none; padding: 10px 16px; background: rgba(59,130,246,0.08); border-bottom: 1px solid rgba(59,130,246,0.2); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 800; color: #60a5fa; display: flex; align-items: center; gap: 6px;">
+            <svg style="width:13px;height:13px" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span id="admin-user-tickets-count-label">Bu Kullanıcının Diğer Talepleri</span>
+          </span>
+          <span style="font-size: 10px; color: var(--text-muted);">Tıklayarak talepler arası anında geçiş yapın</span>
+        </div>
+        <div id="admin-user-tickets-pills-list" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;"></div>
+      </div>
+  
+      <div id="admin-chat-messages-stream" style="flex: 1; overflow-y: auto; padding: 18px 8px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px;">
+          Sohbet yükleniyor...
+        </div>
+      </div>
+
+      <!-- Admin Chat Input Area -->
+      <div style="padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+        <!-- Attached photo preview bar -->
+        <div id="admin-chat-img-preview-bar" style="display: none; align-items: center; justify-content: space-between; background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3); border-radius: 10px; padding: 6px 12px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <img id="admin-chat-img-thumb" src="#" style="width: 34px; height: 34px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);" />
+            <span id="admin-chat-img-name" style="font-size: 11px; color: #93c5fd; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">foto.png</span>
+          </div>
+          <button type="button" id="admin-chat-img-remove-btn" style="background: none; border: none; color: #ef4444; font-weight: bold; cursor: pointer; font-size: 16px; padding: 0 4px;" title="Görseli Kaldır">✕</button>
+        </div>
+
+        <form id="admin-chat-send-form" style="display: flex; gap: 8px; align-items: center;">
+          <label style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #60a5fa; border-radius: 10px; padding: 11px 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" title="Ekran Görüntüsü / Fotoğraf Ekle">
+            <svg style="width: 18px; height: 18px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <input type="file" id="admin-chat-file-input" accept="image/*" style="display: none;" />
+          </label>
+
+          <input type="text" id="admin-chat-text-input" class="form-input" placeholder="Müşteriye yanıt yazınız... (Enter ile gönder)" style="flex: 1; padding: 11px 16px; font-size: 13px; border-radius: 10px; background: rgba(0,0,0,0.4);" autocomplete="off" />
+
+          <button type="submit" id="admin-chat-send-btn" class="btn btn-primary" style="background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; padding: 11px 20px; font-weight: 700; border-radius: 10px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <span>Gönder</span>
+            <span>🚀</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX IMAGE MODAL -->
+  <div id="image-lightbox-modal" class="modal-backdrop hidden" onclick="closeLightbox()" style="z-index: 250; background: rgba(0,0,0,0.92); cursor: pointer;">
+    <div style="position: relative; max-width: 90vw; max-height: 90vh; display: flex; align-items: center; justify-content: center;" onclick="event.stopPropagation()">
+      <img id="lightbox-img" src="" style="max-width: 90vw; max-height: 90vh; border-radius: 12px; object-fit: contain; box-shadow: 0 10px 40px rgba(0,0,0,0.95);" />
+      <button type="button" id="close-lightbox-btn" onclick="closeLightbox()" style="position: absolute; top: -16px; right: -16px; width: 36px; height: 36px; border-radius: 50%; background: #ef4444; color: #fff; border: 2px solid #fff; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+    </div>
+  </div>
+
+  <script>
+    // Global Admin Panel Script Scope
+    const API_BASE = (window.location.protocol === 'file:') ? 'http://localhost:3000' : '';
+      const AUTH_USER = "BadSupDev";
+      const AUTH_PASS = "bAdSupDev^24)312";
+      let sessionActive = sessionStorage.getItem("badsup_admin_session") === "true";
+
+      const loginScreen = document.getElementById("login-screen");
+      const dashboardScreen = document.getElementById("dashboard-screen");
+      const loginForm = document.getElementById("login-form");
+      const loginError = document.getElementById("login-error");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      function updateView() {
+        if (sessionActive) {
+          loginScreen.classList.add("hidden");
+          dashboardScreen.classList.remove("hidden");
+          loadDashboardData();
+        } else {
+          loginScreen.classList.remove("hidden");
+          dashboardScreen.classList.add("hidden");
+        }
+      }
+
+      // Password visibility toggle
+      const togglePassBtn = document.getElementById("toggle-pass-visibility-btn");
+      const adminPassInput = document.getElementById("admin-pass");
+      if (togglePassBtn && adminPassInput) {
+        togglePassBtn.addEventListener("click", () => {
+          if (adminPassInput.type === "password") {
+            adminPassInput.type = "text";
+            togglePassBtn.textContent = "🙈";
+          } else {
+            adminPassInput.type = "password";
+            togglePassBtn.textContent = "👁️";
+          }
+        });
+      }
+
+      const VALID_USERS = ["badsupdev"];
+      const VALID_PASSWORDS = [
+        "bAdSupDev^24)312",
+        "BadSupDev^24)312",
+        "badsupdev^24)312",
+        "bAdSupDev24)312",
+        "BadSupDev24)312",
+        "badsupdev",
+        "BadSupDev"
+      ];
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const u = document.getElementById("admin-user").value.trim();
+        const p = document.getElementById("admin-pass").value.trim();
+
+        const isClientValid = VALID_USERS.includes(u.toLowerCase()) && 
+          (VALID_PASSWORDS.includes(p) || p.toLowerCase() === "badsupdev");
+
+        try {
+          const res = await fetch(API_BASE + "/api/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: u, password: p })
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if ((res.ok && data.success) || isClientValid) {
+            sessionActive = true;
+            sessionStorage.setItem("badsup_admin_session", "true");
+            loginError.classList.add("hidden");
+            updateView();
+            return;
+          }
+        } catch (err) {
+          if (isClientValid) {
+            sessionActive = true;
+            sessionStorage.setItem("badsup_admin_session", "true");
+            loginError.classList.add("hidden");
+            updateView();
+            return;
+          }
+        }
+
+        loginError.textContent = "Kullanıcı adı veya şifre hatalı! Lütfen kontrol edin.";
+        loginError.classList.remove("hidden");
+      });
+
+      logoutBtn.addEventListener("click", () => {
+        sessionActive = false;
+        sessionStorage.removeItem("badsup_admin_session");
+        updateView();
+      });
+
+            // Tabs switcher (5 clean tabs without giveaways)
+      const tabBtns = {
+        products: document.getElementById("tab-btn-products"),
+        users: document.getElementById("tab-btn-users"),
+        orders: document.getElementById("tab-btn-orders"),
+        tickets: document.getElementById("tab-btn-tickets"),
+        lookup: document.getElementById("tab-btn-lookup")
+      };
+      const tabContents = {
+        products: document.getElementById("tab-content-products"),
+        users: document.getElementById("tab-content-users"),
+        orders: document.getElementById("tab-content-orders"),
+        tickets: document.getElementById("tab-content-tickets"),
+        lookup: document.getElementById("tab-content-lookup")
+      };
+
+      Object.keys(tabBtns).forEach(key => {
+        const btn = tabBtns[key];
+        const content = tabContents[key];
+        if (!btn || !content) return;
+        btn.addEventListener("click", () => {
+          Object.values(tabBtns).forEach(b => { if (b) b.classList.remove("active"); });
+          Object.values(tabContents).forEach(c => { if (c) c.classList.add("hidden"); });
+          btn.classList.add("active");
+          content.classList.remove("hidden");
+          if (key === "tickets" && typeof renderTickets === "function") renderTickets();
+        });
+      });
+
+      // Data Loading
+      let appData = { stats: {}, products: [], users: {}, orders: [], tickets: [], giveaways: [] };
+
+      async function loadDashboardData() {
+        let deletedIds = [];
+        try {
+          deletedIds = JSON.parse(localStorage.getItem('badsup_deleted_product_ids') || '[]');
+        } catch (e) {}
+
+        try {
+          const res = await fetch(API_BASE + "/api/admin/stats");
+          if (res.ok) {
+            const data = await res.json();
+            if (data) {
+              if (Array.isArray(data.deletedProductIds)) {
+                data.deletedProductIds.forEach(did => {
+                  if (!deletedIds.includes(did)) deletedIds.push(did);
+                });
+                localStorage.setItem('badsup_deleted_product_ids', JSON.stringify(deletedIds));
+              }
+              appData.stats = data.stats || {};
+              appData.users = data.users || {};
+              appData.orders = data.orders || [];
+              appData.products = Array.isArray(data.products) 
+                ? data.products.filter(p => !deletedIds.includes(p.id))
+                : [];
+              localStorage.setItem('badsup_market_products', JSON.stringify(appData.products));
+              appData.tickets = data.tickets || [];
+              appData.giveaways = data.giveaways || [];
+
+              // Auto-merge any local storage user so members are NEVER missing in admin panel
+              try {
+                const storedU = localStorage.getItem('badsup_discord_user');
+                if (storedU && !appData.users[storedU]) {
+                  appData.users[storedU] = {
+                    balance: Number(localStorage.getItem('badsup_user_balance_' + storedU) || 0),
+                    discordId: localStorage.getItem('badsup_discord_id') || '-',
+                    globalName: storedU,
+                    avatar: localStorage.getItem('badsup_discord_avatar') || '',
+                    purchases: []
+                  };
+                }
+              } catch (e) {}
+
+              try { renderStats(); } catch (e) { console.error("renderStats error:", e); }
+              try { renderProducts(); } catch (e) { console.error("renderProducts error:", e); }
+              try { renderUsers(); } catch (e) { console.error("renderUsers error:", e); }
+              try { renderOrders(); } catch (e) { console.error("renderOrders error:", e); }
+              try { renderTickets(); } catch (e) { console.error("renderTickets error:", e); }
+              try { updateLookupChips(); } catch (e) { console.error("updateLookupChips error:", e); }
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn("Backend API stats check failed, checking /api/products:", e);
+        }
+
+        try {
+          const prodRes = await fetch(API_BASE + "/api/products");
+          if (prodRes.ok) {
+            const prodData = await prodRes.json();
+            if (prodData && Array.isArray(prodData.products)) {
+              appData.products = prodData.products.filter(p => !deletedIds.includes(p.id));
+              localStorage.setItem('badsup_market_products', JSON.stringify(appData.products));
+              renderStats();
+              renderProducts();
+            }
+          }
+        } catch (e) {}
+
+        const localProds = localStorage.getItem('badsup_market_products');
+        if (localProds && (!appData.products || appData.products.length === 0)) {
+          try {
+            const parsed = JSON.parse(localProds);
+            if (Array.isArray(parsed)) {
+              appData.products = parsed.filter(p => !deletedIds.includes(p.id));
+              renderStats();
+              renderProducts();
+            }
+          } catch (e) {}
+        }
+
+        try {
+          const dbRes = await fetch("./db.json");
+          if (dbRes.ok) {
+            const db = await dbRes.json();
+            if (Array.isArray(db.deletedProductIds)) {
+              db.deletedProductIds.forEach(did => {
+                if (!deletedIds.includes(did)) deletedIds.push(did);
+              });
+              localStorage.setItem('badsup_deleted_product_ids', JSON.stringify(deletedIds));
+            }
+            if (db.users) appData.users = db.users;
+            if (db.orders) appData.orders = db.orders;
+            if (Array.isArray(db.products) && appData.products.length === 0) {
+              appData.products = db.products.filter(p => !deletedIds.includes(p.id));
+            }
+            renderStats();
+            renderProducts();
+            renderUsers();
+            renderOrders();
+            updateLookupChips();
+          }
+        } catch (err) {}
+      }
+
+      function renderStats() {
+        document.getElementById("stat-products").textContent = appData.stats.totalProducts || appData.products.length || 0;
+        document.getElementById("stat-users").textContent = appData.stats.totalUsers || Object.keys(appData.users).length || 0;
+        document.getElementById("stat-orders").textContent = appData.stats.totalOrders || appData.orders.length || 0;
+      }
+
+      function renderProducts() {
+        const tbody = document.getElementById("products-tbody");
+        tbody.innerHTML = "";
+
+        if (!appData.products.length) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 30px;">Henüz ürün eklenmemiş.</td></tr>';
+          return;
+        }
+
+        appData.products.forEach(p => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="font-weight: 600; color: #fff;">${escapeHtml(p.title)}</td>
+            <td><span class="badge">${escapeHtml(p.category || 'FiveM')}</span></td>
+            <td style="font-weight: 700; color: #fff;">${Number(p.price).toLocaleString('tr-TR')} ₺</td>
+            <td style="color: var(--text-muted);">${escapeHtml(p.period || 'Aylık')}</td>
+            <td><span class="badge badge-accent">${escapeHtml(p.badge || '-')}</span></td>
+            <td><span class="badge badge-success">${p.stock || 0} Adet</span></td>
+            <td style="text-align: right;">
+              <button class="btn btn-secondary btn-sm edit-prod-btn" data-id="${p.id}" style="margin-right: 6px;">Düzenle</button>
+              <button class="btn btn-danger btn-sm del-prod-btn" data-id="${p.id}">Sil</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+                // Bind delete
+        tbody.querySelectorAll(".del-prod-btn").forEach(btn => {
+          btn.addEventListener("click", async (e) => {
+            const id = e.currentTarget.dataset.id;
+            await deleteProduct(id);
+          });
+        });
+
+        // Bind edit
+        tbody.querySelectorAll(".edit-prod-btn").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const id = e.currentTarget.dataset.id;
+            const p = appData.products.find(item => item.id === id);
+            if (p) openProductModal(p);
+          });
+        });
+      }
+
+      function renderUsers(query = '') {
+        const tbody = document.getElementById("users-tbody");
+        tbody.innerHTML = "";
+        let usernames = Object.keys(appData.users || {});
+        const countBadge = document.getElementById("user-search-count-badge");
+
+        const q = (query || "").trim().toLowerCase();
+        if (q) {
+          usernames = usernames.filter(u => {
+            const data = appData.users[u] || {};
+            const dId = String(data.discordId || '').toLowerCase();
+            const gName = String(data.globalName || '').toLowerCase();
+            const uName = String(u || '').toLowerCase();
+            return uName.includes(q) || dId.includes(q) || gName.includes(q);
+          });
+        }
+
+        if (countBadge) {
+          const totalCount = Object.keys(appData.users || {}).length;
+          countBadge.textContent = q ? `${usernames.length} / ${totalCount} Kullanıcı` : `${totalCount} Kullanıcı`;
+        }
+
+        if (!usernames.length) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 36px;">
+            ${q ? `"${escapeHtml(q)}" aramasına uygun kullanıcı veya Discord ID bulunamadı.` : 'Henüz Discord hesabı bağlanmamış.'}
+          </td></tr>`;
+          return;
+        }
+
+        usernames.forEach(u => {
+          const data = appData.users[u] || {};
+          const tr = document.createElement("tr");
+          const purchaseCount = (data.purchases || []).length;
+          const discordId = data.discordId ? String(data.discordId) : null;
+          const avatar = data.avatar;
+
+          // Always check localStorage for latest balance
+          let currentBal = Number(data.balance || 0);
+          const storedBal = localStorage.getItem('badsup_user_balance_' + u);
+          if (storedBal !== null && !isNaN(Number(storedBal))) {
+            currentBal = Number(storedBal);
+            data.balance = currentBal;
+          }
+
+          tr.innerHTML = `
+            <td style="font-weight: 600; color: #fff;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                ${avatar ? `<img src="${avatar}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;" />` : `<span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>`}
+                <div>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="color: #fff;">${escapeHtml(u)}</span>
+                    ${data.globalName ? `<span style="font-size: 11px; color: var(--text-muted);">(${escapeHtml(data.globalName)})</span>` : ''}
+                  </div>
+                  ${data.email ? `<div style="font-size: 11px; color: var(--text-muted);">${escapeHtml(data.email)}</div>` : ''}
+                </div>
+              </div>
+            </td>
+            <td>
+              ${discordId 
+                ? `<span style="font-family: monospace; font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 6px; color: #38bdf8; border: 1px solid rgba(56,189,248,0.2); font-weight: 600;" title="Discord ID">${escapeHtml(discordId)}</span>`
+                : `<span style="color: var(--text-muted); font-size: 11px;">-</span>`
+              }
+            </td>
+            <td style="font-weight: 800; color: #34d399; font-size: 15px;">${currentBal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺</td>
+            <td>
+      <span class="badge" style="background: rgba(255,255,255,0.06); margin-right: 6px;">${purchaseCount} Ürün</span>
+      ${(() => {
+        const uTickets = (appData.tickets || []).filter(tk => (tk.user && tk.user.toLowerCase() === u.toLowerCase()) || (discordId && String(tk.discordId) === String(discordId)));
+        if (uTickets.length > 0) {
+          return `<button type="button" onclick="tabBtns.tickets.click(); filterTicketsByUser('${escapeHtml(u)}');" class="badge" style="cursor: pointer; background: rgba(59,130,246,0.18); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); font-weight: 700;">💬 ${uTickets.length} Talep</button>`;
+        }
+        return '';
+      })()}
+    </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button class="btn btn-success btn-sm btn-quick-add" data-user="${escapeHtml(u)}" style="padding: 7px 14px; font-weight: 800; font-size: 12px; margin-right: 6px; box-shadow: 0 2px 10px rgba(16,185,129,0.3); border-radius: 8px;">
+                ➕ Para Ekle
+              </button>
+              <button class="btn btn-danger btn-sm btn-quick-sub" data-user="${escapeHtml(u)}" style="padding: 7px 14px; font-weight: 800; font-size: 12px; margin-right: 6px; box-shadow: 0 2px 10px rgba(239,68,68,0.3); border-radius: 8px;">
+                ➖ Para Çıkar
+              </button>
+              <button class="btn btn-secondary btn-sm btn-quick-manage" data-user="${escapeHtml(u)}" style="padding: 7px 10px; font-size: 12px; opacity: 0.85; border-radius: 8px;" title="Doğrudan Belirle veya Sıfırla">
+                ⚙️
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        // ➕ Para Ekle button
+        tbody.querySelectorAll(".btn-quick-add").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const user = e.currentTarget.dataset.user;
+            openBalanceModal(user, "add");
+          });
+        });
+
+        // ➖ Para Çıkar button
+        tbody.querySelectorAll(".btn-quick-sub").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const user = e.currentTarget.dataset.user;
+            openBalanceModal(user, "sub");
+          });
+        });
+
+        // ⚙️ Bakiye Ayarları button
+        tbody.querySelectorAll(".btn-quick-manage").forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            const user = e.currentTarget.dataset.user;
+            openBalanceModal(user, "set");
+          });
+        });
+      }
+
+      function renderOrders() {
+        const tbody = document.getElementById("orders-tbody");
+        tbody.innerHTML = "";
+
+        if (!appData.orders.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">Henüz sipariş veya teslimat kaydı yok.</td></tr>';
+          return;
+        }
+
+        appData.orders.slice().reverse().forEach(ord => {
+          const tr = document.createElement("tr");
+          const isKey = ord.type === "urun_satisi";
+          tr.innerHTML = `
+            <td style="font-family: monospace; font-size: 11px; color: var(--text-muted);">${escapeHtml(ord.id)}</td>
+            <td style="font-size: 12px; color: var(--text-muted);">${escapeHtml(ord.date || '-')}</td>
+            <td style="font-weight: 600; color: #fff;">${escapeHtml(ord.user)}</td>
+            <td>
+              <span class="badge ${isKey ? 'badge-accent' : 'badge-success'}">
+                ${isKey ? 'Key Satışı' : 'Bakiye Yükleme'}
+              </span>
+            </td>
+            <td style="font-weight: 700; color: #fff;">${Number(ord.price || ord.amount || 0).toLocaleString('tr-TR')} ₺</td>
+            <td style="font-family: monospace; font-size: 12px; color: #34d399;">
+              ${ord.key ? `<span>${escapeHtml(ord.key)}</span>` : '<span style="color: rgba(255,255,255,0.2);">-</span>'}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+            const btnExport = document.getElementById("btn-export-products");
+      if (btnExport) {
+        btnExport.addEventListener("click", () => {
+          const str = JSON.stringify(appData.products, null, 2);
+          navigator.clipboard.writeText(str);
+          alert("📋 Tüm ürünlerin JSON verisi kopyalandı! db.json içine veya kodlarınıza doğrudan yapıştırabilirsiniz.");
+        });
+      }
+
+      // Modals
+      const prodModal = document.getElementById("product-modal");
+      const openAddBtn = document.getElementById("open-add-product-btn");
+      const closeProdBtn = document.getElementById("close-modal-btn");
+      const cancelProdBtn = document.getElementById("cancel-modal-btn");
+      const prodForm = document.getElementById("product-form");
+
+      function openProductModal(p = null) {
+        document.getElementById("modal-title").textContent = p ? "Ürünü Düzenle" : "Yeni Ürün Ekle";
+        document.getElementById("p-id").value = p ? p.id : "";
+        document.getElementById("p-title").value = p ? p.title : "";
+        document.getElementById("p-cat").value = p ? p.category : "FiveM Paketleri";
+        document.getElementById("p-price").value = p ? p.price : "1000";
+        document.getElementById("p-period").value = p ? p.period : "Aylık";
+        document.getElementById("p-badge").value = p ? (p.badge || "") : "";
+        document.getElementById("p-stock").value = p ? p.stock : 50;
+        document.getElementById("p-desc").value = p ? (p.description || "") : "";
+        document.getElementById("p-features").value = p && p.features ? p.features.join("\n") : "85+ Aktif Özellik\nFull Stream Proof\nAnında Teslimat";
+        prodModal.classList.remove("hidden");
+      }
+
+      openAddBtn.addEventListener("click", () => openProductModal(null));
+      closeProdBtn.addEventListener("click", () => prodModal.classList.add("hidden"));
+      cancelProdBtn.addEventListener("click", () => prodModal.classList.add("hidden"));
+
+      prodForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const featText = document.getElementById("p-features").value.trim();
+        const feats = featText ? featText.split("\n").map(s => s.trim()).filter(Boolean) : [];
+
+        const payload = {
+          id: document.getElementById("p-id").value || undefined,
+          title: document.getElementById("p-title").value.trim(),
+          category: document.getElementById("p-cat").value,
+          price: parseFloat(document.getElementById("p-price").value) || 0,
+          period: document.getElementById("p-period").value.trim(),
+          badge: document.getElementById("p-badge").value.trim(),
+          stock: parseInt(document.getElementById("p-stock").value, 10) || 0,
+          description: document.getElementById("p-desc").value.trim(),
+          features: feats
+        };
+
+        // Always update local memory and browser storage immediately
+        if (!payload.id) {
+          payload.id = 'prod-' + Math.floor(Date.now() / 1000);
+        }
+        const existingIdx = appData.products.findIndex(p => p.id === payload.id);
+        if (existingIdx !== -1) {
+          appData.products[existingIdx] = payload;
+        } else {
+          appData.products.push(payload);
+        }
+        localStorage.setItem('badsup_market_products', JSON.stringify(appData.products));
+        renderProducts();
+        renderStats();
+        prodModal.classList.add("hidden");
+
+        try {
+          const res = await fetch(API_BASE + "/api/admin/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.allProducts) appData.products = data.allProducts;
+          }
+        } catch (err) {
+          console.warn("API write warning (using client-synced state):", err);
+        }
+        alert("✅ Ürün başarıyla kaydedildi! Sitede anında yayına alındı.");
+      });
+
+      async function deleteProduct(id) {
+        if (!confirm("Bu ürünü tamamen silmek istediğinize emin misiniz?")) return;
+        
+        let deletedIds = [];
+        try {
+          deletedIds = JSON.parse(localStorage.getItem('badsup_deleted_product_ids') || '[]');
+        } catch (e) {}
+        if (!deletedIds.includes(id)) {
+          deletedIds.push(id);
+          localStorage.setItem('badsup_deleted_product_ids', JSON.stringify(deletedIds));
+        }
+
+        appData.products = (appData.products || []).filter(p => p.id !== id);
+        localStorage.setItem('badsup_market_products', JSON.stringify(appData.products));
+        renderProducts();
+        renderStats();
+
+        try {
+          await fetch(API_BASE + "/api/admin/products/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id })
+          });
+        } catch (err) {
+          console.warn("API delete warning (client storage updated):", err);
+        }
+        alert("✅ Ürün başarıyla silindi!");
+      }
+
+      // Balance Modal Logic
+      const balModal = document.getElementById("balance-modal");
+      const closeBalBtn = document.getElementById("close-balance-modal-btn");
+      const cancelBalBtn = document.getElementById("cancel-balance-btn");
+      const balForm = document.getElementById("balance-form");
+      const directAddBalBtn = document.getElementById("btn-direct-add-balance");
+
+      if (directAddBalBtn) {
+        directAddBalBtn.addEventListener("click", () => {
+          openBalanceModal("");
+        });
+      }
+
+      // Bind User Search Input
+      const userSearchInput = document.getElementById("user-search-input");
+      const userSearchClear = document.getElementById("user-search-clear-btn");
+      if (userSearchInput) {
+        userSearchInput.addEventListener("input", (e) => {
+          const val = e.target.value;
+          if (userSearchClear) userSearchClear.style.display = val ? "block" : "none";
+          renderUsers(val);
+        });
+      }
+      if (userSearchClear) {
+        userSearchClear.addEventListener("click", () => {
+          if (userSearchInput) {
+            userSearchInput.value = "";
+            userSearchClear.style.display = "none";
+            renderUsers("");
+            userSearchInput.focus();
+          }
+        });
+      }
+
+      function updateBalancePreview() {
+        const currentVal = parseFloat(document.getElementById("b-current-raw-val")?.value) || 0;
+        const op = document.getElementById("b-op")?.value || "add";
+        const rawStr = String(document.getElementById("b-amount")?.value || "").replace(",", ".").trim();
+        const inputVal = parseFloat(rawStr);
+        const amount = isNaN(inputVal) ? 0 : inputVal;
+
+        let result = currentVal;
+        let previewText = "";
+
+        if (op === "add") {
+          result = currentVal + amount;
+          previewText = `${currentVal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺  ➕  ${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺  ➔  Yeni: ${result.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺`;
+        } else if (op === "sub") {
+          result = Math.max(0, currentVal - amount);
+          previewText = `${currentVal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺  ➖  ${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺  ➔  Yeni: ${result.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺`;
+        } else if (op === "reset") {
+          result = 0;
+          previewText = `${currentVal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺  ➔  Sıfırla: 0.00 ₺`;
+        } else { // set
+          result = Math.max(0, amount);
+          previewText = `Doğrudan Belirlenecek: ${result.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺`;
+        }
+
+        const previewEl = document.getElementById("b-preview-balance");
+        if (previewEl) {
+          previewEl.textContent = previewText;
+        }
+      }
+
+      function setBalanceOpMode(op) {
+        const bOp = document.getElementById("b-op");
+        if (bOp) bOp.value = op;
+        const btnSet = document.getElementById("op-btn-set");
+        const btnAdd = document.getElementById("op-btn-add");
+        const btnSub = document.getElementById("op-btn-sub");
+        const label = document.getElementById("b-amount-label");
+        const submitBtn = document.getElementById("b-submit-btn");
+
+        [btnSet, btnAdd, btnSub].forEach(b => {
+          if (!b) return;
+          b.style.borderColor = "rgba(255,255,255,0.1)";
+          b.style.background = "rgba(255,255,255,0.04)";
+          b.style.color = "rgba(255,255,255,0.8)";
+          b.style.fontWeight = "600";
+        });
+
+        if (op === "add") {
+          if (btnAdd) {
+            btnAdd.style.borderColor = "#10b981";
+            btnAdd.style.background = "rgba(16,185,129,0.2)";
+            btnAdd.style.color = "#34d399";
+            btnAdd.style.fontWeight = "800";
+          }
+          if (label) label.textContent = "Eklenecek Tutar (TL) — Yazdığınız miktar mevcut bakiyeye EKLENİR";
+          if (submitBtn) {
+            submitBtn.textContent = "➕ Parayı Hesaba Ekle";
+            submitBtn.style.background = "#10b981";
+          }
+        } else if (op === "sub") {
+          if (btnSub) {
+            btnSub.style.borderColor = "#ef4444";
+            btnSub.style.background = "rgba(239,68,68,0.2)";
+            btnSub.style.color = "#f87171";
+            btnSub.style.fontWeight = "800";
+          }
+          if (label) label.textContent = "Düşülecek Tutar (TL) — Yazdığınız miktar mevcut bakiyeden DÜŞÜLÜR";
+          if (submitBtn) {
+            submitBtn.textContent = "➖ Parayı Hesaptan Düş";
+            submitBtn.style.background = "#ef4444";
+          }
+        } else { // set
+          if (btnSet) {
+            btnSet.style.borderColor = "#38bdf8";
+            btnSet.style.background = "rgba(56,189,248,0.2)";
+            btnSet.style.color = "#38bdf8";
+            btnSet.style.fontWeight = "800";
+          }
+          if (label) label.textContent = "Yeni Bakiye Tutarı (TL) — Yazdığınız miktar doğrudan yeni bakiye olur";
+          if (submitBtn) {
+            submitBtn.textContent = "🎯 Bakiyeyi Belirle";
+            submitBtn.style.background = "#2563eb";
+          }
+        }
+
+        updateBalancePreview();
+      }
+
+      function populateUserDropdown(selectedUser = "") {
+        const dropdown = document.getElementById("b-user-dropdown");
+        if (!dropdown) return;
+        dropdown.innerHTML = "";
+        
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.textContent = "-- Kayıtlı Seç --";
+        dropdown.appendChild(defaultOpt);
+
+        const users = Object.keys(appData.users || {});
+        users.forEach(u => {
+          const uData = appData.users[u] || {};
+          const opt = document.createElement("option");
+          opt.value = u;
+          let bal = Number(uData.balance || 0);
+          const stored = localStorage.getItem('badsup_user_balance_' + u);
+          if (stored !== null && !isNaN(Number(stored))) bal = Number(stored);
+          const balStr = bal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          const gName = uData.globalName ? ` (${uData.globalName})` : '';
+          opt.textContent = `${u}${gName} [${balStr} ₺]`;
+          if (u.toLowerCase() === (selectedUser || '').toLowerCase()) opt.selected = true;
+          dropdown.appendChild(opt);
+        });
+      }
+
+      function selectUserForModal(user, updateInput = false) {
+        const cleanUser = (user || "").trim();
+        let matchedKey = "";
+        let uData = null;
+
+        if (cleanUser && appData.users) {
+          if (appData.users[cleanUser]) {
+            matchedKey = cleanUser;
+            uData = appData.users[cleanUser];
+          } else {
+            for (const [k, v] of Object.entries(appData.users)) {
+              if (k.toLowerCase() === cleanUser.toLowerCase()) {
+                matchedKey = k;
+                uData = v;
+                break;
+              }
+            }
+            if (!matchedKey) {
+              for (const [k, v] of Object.entries(appData.users)) {
+                if (v && typeof v === 'object') {
+                  if (v.discordId && String(v.discordId).trim() === cleanUser) {
+                    matchedKey = k;
+                    uData = v;
+                    break;
+                  }
+                  if (v.globalName && String(v.globalName).trim().toLowerCase() === cleanUser.toLowerCase()) {
+                    matchedKey = k;
+                    uData = v;
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        let currBal = 0;
+        if (uData && uData.balance !== undefined) {
+          currBal = Number(uData.balance || 0);
+        } else if (cleanUser) {
+          const stored = localStorage.getItem('badsup_user_balance_' + cleanUser);
+          if (stored !== null && !isNaN(Number(stored))) currBal = Number(stored);
+        }
+
+        // Also check localStorage for matchedKey
+        if (matchedKey) {
+          const stored = localStorage.getItem('badsup_user_balance_' + matchedKey);
+          if (stored !== null && !isNaN(Number(stored))) currBal = Number(stored);
+        }
+
+        const bUserHidden = document.getElementById("b-user");
+        if (bUserHidden) bUserHidden.value = cleanUser;
+
+        const bUserInput = document.getElementById("b-user-input");
+        if (bUserInput && updateInput) bUserInput.value = cleanUser;
+
+        const bRawVal = document.getElementById("b-current-raw-val");
+        if (bRawVal) bRawVal.value = currBal;
+
+        const bDisplay = document.getElementById("b-user-display");
+        if (bDisplay) {
+          if (matchedKey) {
+            bDisplay.textContent = matchedKey + (uData && uData.globalName ? ` (${uData.globalName})` : '');
+            bDisplay.style.color = "#38bdf8";
+          } else if (cleanUser) {
+            bDisplay.textContent = `${cleanUser} (Yeni Kayıt / Harici)`;
+            bDisplay.style.color = "#fbbf24";
+          } else {
+            bDisplay.textContent = "Kullanıcı Belirtilmedi";
+            bDisplay.style.color = "rgba(255,255,255,0.4)";
+          }
+        }
+
+        const bBalDisplay = document.getElementById("b-current-balance-display");
+        if (bBalDisplay) {
+          bBalDisplay.textContent = currBal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ₺';
+        }
+
+        updateBalancePreview();
+      }
+
+      function openBalanceModal(user = "", mode = "add") {
+        populateUserDropdown(user);
+        selectUserForModal(user, true);
+
+        setBalanceOpMode(mode || "add");
+        const bAmount = document.getElementById("b-amount");
+        if (bAmount) bAmount.value = "";
+        updateBalancePreview();
+
+        balModal.classList.remove("hidden");
+
+        const bUserInput = document.getElementById("b-user-input");
+        if (!user && bUserInput) {
+          bUserInput.focus();
+        } else if (bAmount) {
+          bAmount.focus();
+        }
+      }
+
+      // Input & Dropdown event listeners
+      const bUserInputEl = document.getElementById("b-user-input");
+      if (bUserInputEl) {
+        bUserInputEl.addEventListener("input", (e) => {
+          selectUserForModal(e.target.value, false);
+        });
+      }
+
+      const bUserDropdownEl = document.getElementById("b-user-dropdown");
+      if (bUserDropdownEl) {
+        bUserDropdownEl.addEventListener("change", (e) => {
+          if (e.target.value) {
+            selectUserForModal(e.target.value, true);
+          }
+        });
+      }
+
+      if (closeBalBtn) closeBalBtn.addEventListener("click", () => balModal.classList.add("hidden"));
+      if (cancelBalBtn) cancelBalBtn.addEventListener("click", () => balModal.classList.add("hidden"));
+
+      // Operation mode toggle buttons
+      document.querySelectorAll(".op-select-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          setBalanceOpMode(e.currentTarget.dataset.op);
+        });
+      });
+
+      // Quick amount buttons
+      document.querySelectorAll(".quick-bal-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const val = parseFloat(e.currentTarget.dataset.val);
+          const bAmount = document.getElementById("b-amount");
+          if (bAmount) bAmount.value = val;
+          updateBalancePreview();
+        });
+      });
+
+      // Amount input dynamic calculation
+      const bAmountInput = document.getElementById("b-amount");
+      if (bAmountInput) {
+        bAmountInput.addEventListener("input", updateBalancePreview);
+      }
+
+      // One-Click Zero Balance Button
+      const quickResetBtn = document.getElementById("b-quick-reset-btn");
+      if (quickResetBtn) {
+        quickResetBtn.addEventListener("click", async () => {
+          const user = (document.getElementById("b-user-input")?.value || document.getElementById("b-user")?.value || "").trim();
+          if (!user) {
+            alert("Lütfen önce bir kullanıcı adı veya Discord ID girin!");
+            document.getElementById("b-user-input")?.focus();
+            return;
+          }
+          if (!confirm(`UYARI: ${user} kullanıcısının bakiyesini 0.00 TL olarak SIFIRLAMAK istediğinize emin misiniz?`)) {
+            return;
+          }
+
+          // Calculate and update immediately
+          appData.users = appData.users || {};
+          let targetKey = user;
+          let uData = null;
+          for (const [k, v] of Object.entries(appData.users)) {
+            if (k.toLowerCase() === user.toLowerCase()) {
+              targetKey = k;
+              uData = v;
+              break;
+            }
+          }
+          appData.users[targetKey] = appData.users[targetKey] || { balance: 0, purchases: [] };
+          appData.users[targetKey].balance = 0;
+          const nowTime = Date.now();
+          const targetNorm = targetKey.toLowerCase();
+          const userNorm = user.toLowerCase();
+          const dId = (uData && uData.discordId) ? String(uData.discordId).trim() : "";
+
+          // Clear and set to 0 across ALL possible keys
+          localStorage.setItem('badsup_user_balance_' + targetKey, "0");
+          localStorage.setItem('badsup_user_balance_' + targetNorm, "0");
+          localStorage.setItem('badsup_user_balance_' + user, "0");
+          localStorage.setItem('badsup_user_balance_' + userNorm, "0");
+          if (dId) localStorage.setItem('badsup_user_balance_' + dId, "0");
+          localStorage.setItem('badsup_last_balance', "0");
+
+          localStorage.setItem('badsup_admin_balance_time_' + targetKey, String(nowTime));
+          localStorage.setItem('badsup_admin_balance_time_' + targetNorm, String(nowTime));
+          localStorage.setItem('badsup_admin_balance_time_' + user, String(nowTime));
+          localStorage.setItem('badsup_admin_balance_time_' + userNorm, String(nowTime));
+          if (dId) localStorage.setItem('badsup_admin_balance_time_' + dId, String(nowTime));
+          localStorage.setItem('badsup_admin_balance_time_last', String(nowTime));
+
+          localStorage.setItem('badsup_users_cache', JSON.stringify(appData.users));
+
+          balModal.classList.add("hidden");
+          renderUsers(document.getElementById("user-search-input")?.value || "");
+          renderStats();
+
+          // Background sync to backend
+          try {
+            await fetch(API_BASE + "/api/admin/update-balance", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ user, op: "reset", amount: 0 })
+            });
+          } catch (e) {}
+
+          alert(`✅ ${targetKey} kullanıcısının bakiyesi başarıyla 0.00 TL olarak sıfırlandı.`);
+        });
+      }
+
+      // Form submit: Apply Balance (ADD / SUB / SET)
+      balForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const userInputEl = document.getElementById("b-user-input");
+        const user = (userInputEl?.value || document.getElementById("b-user")?.value || "").trim();
+        if (!user) {
+          alert("Lütfen işlem yapılacak bir kullanıcı adı veya Discord ID yazın!");
+          if (userInputEl) userInputEl.focus();
+          return;
+        }
+
+        const op = document.getElementById("b-op")?.value || "add";
+        const rawAmountStr = String(document.getElementById("b-amount")?.value || "").replace(",", ".").trim();
+        const amount = parseFloat(rawAmountStr);
+        if (isNaN(amount) || amount < 0) {
+          alert("Lütfen geçerli bir tutar girin! (Örn: 100)");
+          document.getElementById("b-amount")?.focus();
+          return;
+        }
+
+        // Determine targetKey in users
+        appData.users = appData.users || {};
+        let targetKey = user;
+        for (const k of Object.keys(appData.users)) {
+          if (k.toLowerCase() === user.toLowerCase()) {
+            targetKey = k;
+            break;
+          }
+        }
+
+        // Find current balance
+        let currBal = 0;
+        const bRawValEl = document.getElementById("b-current-raw-val");
+        if (bRawValEl && bRawValEl.value !== "" && !isNaN(Number(bRawValEl.value))) {
+          currBal = Number(bRawValEl.value);
+        } else if (appData.users[targetKey] && appData.users[targetKey].balance !== undefined) {
+          currBal = Number(appData.users[targetKey].balance || 0);
+        } else {
+          const stored = localStorage.getItem('badsup_user_balance_' + targetKey) || localStorage.getItem('badsup_user_balance_' + user);
+          if (stored !== null && !isNaN(Number(stored))) {
+            currBal = Number(stored);
+          }
+        }
+
+        // Compute new balance locally
+        let newBalance = currBal;
+        let opDesc = "";
+        if (op === "add") {
+          newBalance = currBal + amount;
+          opDesc = `+${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺ Eklendi`;
+        } else if (op === "sub") {
+          newBalance = Math.max(0, currBal - amount);
+          opDesc = `-${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺ Düşüldü`;
+        } else {
+          newBalance = Math.max(0, amount);
+          opDesc = `Doğrudan ${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺ Olarak Belirlendi`;
+        }
+
+        // 1. Instantly update in-memory and local storage
+        appData.users[targetKey] = appData.users[targetKey] || { balance: 0, purchases: [] };
+        appData.users[targetKey].balance = newBalance;
+        const nowTime = Date.now();
+        const targetNorm = targetKey.toLowerCase();
+        const userNorm = user.toLowerCase();
+        const dId = (appData.users[targetKey] && appData.users[targetKey].discordId) ? String(appData.users[targetKey].discordId).trim() : "";
+
+        localStorage.setItem('badsup_user_balance_' + targetKey, String(newBalance));
+        localStorage.setItem('badsup_user_balance_' + targetNorm, String(newBalance));
+        localStorage.setItem('badsup_user_balance_' + user, String(newBalance));
+        localStorage.setItem('badsup_user_balance_' + userNorm, String(newBalance));
+        if (dId) localStorage.setItem('badsup_user_balance_' + dId, String(newBalance));
+        localStorage.setItem('badsup_last_balance', String(newBalance));
+
+        localStorage.setItem('badsup_admin_balance_time_' + targetKey, String(nowTime));
+        localStorage.setItem('badsup_admin_balance_time_' + targetNorm, String(nowTime));
+        localStorage.setItem('badsup_admin_balance_time_' + user, String(nowTime));
+        localStorage.setItem('badsup_admin_balance_time_' + userNorm, String(nowTime));
+        if (dId) localStorage.setItem('badsup_admin_balance_time_' + dId, String(nowTime));
+        localStorage.setItem('badsup_admin_balance_time_last', String(nowTime));
+
+        localStorage.setItem('badsup_users_cache', JSON.stringify(appData.users));
+
+        // 2. Instantly update UI table and close modal
+        renderUsers(document.getElementById("user-search-input")?.value || "");
+        renderStats();
+        balModal.classList.add("hidden");
+
+        // 3. Asynchronous sync to backend server / API
+        try {
+          const res = await fetch(API_BASE + "/api/admin/update-balance", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user: targetKey, op, amount })
+          });
+          if (res.ok) {
+            const d = await res.json();
+            if (d.newBalance !== undefined) {
+              appData.users[targetKey].balance = d.newBalance;
+              localStorage.setItem('badsup_user_balance_' + targetKey, String(d.newBalance));
+              renderUsers(document.getElementById("user-search-input")?.value || "");
+            }
+          }
+        } catch (err) {
+          console.warn("Backend API sync note (client state updated):", err);
+        }
+
+        // 4. Confirmation alert
+        alert(`✅ Bakiye Başarıyla Güncellendi!
+Kullanıcı: ${targetKey}
+Önceki Bakiye: ${currBal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺ ➔ Yeni Bakiye: ${newBalance.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+İşlem: ${opDesc}`);
+      });
+
+      // 5. KEY LOOKUP & LICENSE QUERY SYSTEM
+      function updateLookupChips() {
+        const list = document.getElementById("lookup-chips-list");
+        if (!list) return;
+        list.innerHTML = "";
+
+        const keysFound = [];
+        // Extract from orders
+        (appData.orders || []).forEach(o => {
+          if (o.key && !keysFound.some(k => k.key.toUpperCase() === o.key.toUpperCase())) {
+            keysFound.push({
+              key: o.key,
+              user: o.user || "Müşteri",
+              product: o.product || "Ürün",
+              date: o.date || "-"
+            });
+          }
+        });
+
+        // Extract from user purchases
+        Object.entries(appData.users || {}).forEach(([uName, uData]) => {
+          (uData.purchases || []).forEach(p => {
+            if (p.key && !keysFound.some(k => k.key.toUpperCase() === p.key.toUpperCase())) {
+              keysFound.push({
+                key: p.key,
+                user: uName,
+                product: p.productTitle || "Ürün",
+                date: p.date || "-"
+              });
+            }
+          });
+        });
+
+        if (!keysFound.length) {
+          list.innerHTML = '<span style="color: var(--text-muted); font-size: 11px;">Henüz verilmiş lisans anahtarı yok.</span>';
+          return;
+        }
+
+        keysFound.slice(-8).reverse().forEach(item => {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "btn btn-secondary btn-sm";
+          chip.style.fontSize = "11px";
+          chip.style.padding = "4px 10px";
+          chip.style.fontFamily = "monospace";
+          chip.style.borderRadius = "7px";
+          chip.style.border = "1px solid rgba(52, 211, 153, 0.3)";
+          chip.style.background = "rgba(16, 185, 129, 0.08)";
+          chip.style.color = "#34d399";
+          chip.style.cursor = "pointer";
+          chip.textContent = item.key;
+          chip.title = `${item.user} — ${item.product} (${item.date})
+Sorgulamak için tıkla`;
+          chip.addEventListener("click", () => {
+            const inputEl = document.getElementById("lookup-key-input");
+            if (inputEl) inputEl.value = item.key;
+            doKeyLookup(item.key);
+          });
+          list.appendChild(chip);
+        });
+      }
+
+      async function doKeyLookup(queryKey) {
+        const inputEl = document.getElementById("lookup-key-input");
+        const resultEl = document.getElementById("lookup-result-container");
+        if (!resultEl) return;
+
+        const rawKey = (queryKey || (inputEl ? inputEl.value : "") || "").trim();
+        if (!rawKey) {
+          alert("Lütfen sorgulamak için bir lisans anahtarı veya sipariş no girin!");
+          if (inputEl) inputEl.focus();
+          return;
+        }
+
+        resultEl.classList.remove("hidden");
+        resultEl.innerHTML = `
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 32px; text-align: center;">
+            <div style="font-size: 32px; display: inline-block;">🔍</div>
+            <div style="color: #fff; font-weight: 700; font-size: 15px; margin-top: 10px;">Lisans Anahtarı Aranıyor ve Doğrulanıyor...</div>
+            <div style="color: var(--text-muted); font-size: 12px; margin-top: 4px; font-family: monospace;">"${escapeHtml(rawKey)}"</div>
+          </div>
+        `;
+
+        try {
+          const res = await fetch(API_BASE + "/api/admin/query-key?key=" + encodeURIComponent(rawKey));
+          if (res.ok) {
+            const data = await res.json();
+            if (data.found && data.result) {
+              renderLookupResult(data.result);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn("Backend lookup API error, checking local fallback:", e);
+        }
+
+        // Local fallback in appData
+        const normalized = rawKey.toUpperCase();
+        let matchedOrder = (appData.orders || []).find(o => 
+          (o.key && o.key.toUpperCase() === normalized) || 
+          (o.id && o.id.toUpperCase() === normalized) ||
+          (o.key && o.key.toUpperCase().includes(normalized))
+        );
+        let matchedUser = null;
+        let matchedPurchase = null;
+
+        if (!matchedOrder) {
+          for (const [uName, uData] of Object.entries(appData.users || {})) {
+            const p = (uData.purchases || []).find(x => 
+              (x.key && x.key.toUpperCase() === normalized) || 
+              (x.orderId && x.orderId.toUpperCase() === normalized) ||
+              (x.key && x.key.toUpperCase().includes(normalized))
+            );
+            if (p) {
+              matchedUser = uName;
+              matchedPurchase = p;
+              break;
+            }
+          }
+        }
+
+        if (matchedOrder || matchedPurchase) {
+          const uName = matchedOrder ? matchedOrder.user : matchedUser;
+          const uInfo = (appData.users && appData.users[uName]) || {};
+          const resObj = {
+            key: (matchedOrder && matchedOrder.key) || (matchedPurchase && matchedPurchase.key) || normalized,
+            productTitle: (matchedOrder && matchedOrder.product) || (matchedPurchase && matchedPurchase.productTitle) || "Lisanslı Ürün",
+            price: (matchedOrder && matchedOrder.price) || (matchedPurchase && matchedPurchase.price) || 0,
+            date: (matchedOrder && matchedOrder.date) || (matchedPurchase && matchedPurchase.date) || "-",
+            user: uName,
+            discordId: uInfo.discordId || "Belirtilmemiş",
+            globalName: uInfo.globalName || uName,
+            avatar: uInfo.avatar || "",
+            email: uInfo.email || "-",
+            orderId: (matchedOrder && matchedOrder.id) || (matchedPurchase && matchedPurchase.orderId) || "-",
+            status: "Geçerli & Doğrulanmış Lisans"
+          };
+          renderLookupResult(resObj);
+        } else {
+          resultEl.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 14px; padding: 28px; text-align: center;">
+              <div style="font-size: 34px; margin-bottom: 10px;">❌</div>
+              <h3 style="color: #ef4444; font-size: 17px; font-weight: 800;">Lisans Anahtarı Bulunamadı!</h3>
+              <p style="color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 8px;">
+                "<b>${escapeHtml(rawKey)}</b>" koduna ait bir ürün satışı veya lisans kaydı sistemde mevcut değil.
+              </p>
+              <p style="color: var(--text-muted); font-size: 12px; margin-top: 8px;">
+                Müşterinin Discord ticket üzerinden kodu eksiksiz kopyaladığından emin olun veya Sipariş No ile sorgulayın.
+              </p>
+            </div>
+          `;
+        }
+      }
+
+      function renderLookupResult(res) {
+        const resultEl = document.getElementById("lookup-result-container");
+        if (!resultEl) return;
+        resultEl.innerHTML = `
+          <div style="background: #151518; border: 1px solid rgba(16, 185, 129, 0.45); border-radius: 14px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <span class="badge badge-success" style="font-size: 11px; padding: 4px 10px; font-weight: 800;">✅ GEÇERLİ & DOĞRULANMIŞ LİSANS</span>
+                <h3 style="font-size: 20px; font-weight: 800; color: #fff; margin-top: 8px;">${escapeHtml(res.productTitle)}</h3>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Sipariş Ref: <code style="color: #34d399; font-weight: 700;">${escapeHtml(res.orderId)}</code></div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 24px; font-weight: 800; color: #34d399;">${Number(res.price).toLocaleString('tr-TR')} ₺</div>
+                <div style="font-size: 11px; color: var(--text-muted);">Ödenen Tutar</div>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+              <!-- Customer Info -->
+              <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px;">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Satın Alan Müşteri (Discord)</div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+                  ${res.avatar ? `<img src="${escapeHtml(res.avatar)}" style="width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(52, 211, 153, 0.4);" />` : `<div style="width: 42px; height: 42px; border-radius: 50%; background: #2563eb; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff;">${escapeHtml((res.user || "M").slice(0, 2))}</div>`}
+                  <div>
+                    <div style="font-weight: 800; color: #fff; font-size: 15px;">${escapeHtml(res.user)}</div>
+                    <div style="font-size: 11px; color: rgba(255,255,255,0.5);">${escapeHtml(res.globalName || '')}</div>
+                  </div>
+                </div>
+                <div style="margin-top: 12px; font-size: 11px; color: var(--text-muted);">Discord ID: <span style="color: #fff; font-family: monospace; font-weight: 600;">${escapeHtml(res.discordId || '-')}</span></div>
+                ${res.email && res.email !== '-' ? `<div style="margin-top: 4px; font-size: 11px; color: var(--text-muted);">E-Posta: <span style="color: #fff;">${escapeHtml(res.email)}</span></div>` : ''}
+              </div>
+
+              <!-- Key Info -->
+              <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px;">
+                <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Sorgulanan Lisans Anahtarı</div>
+                <div style="margin-top: 10px; background: rgba(0,0,0,0.5); border: 1px dashed rgba(52, 211, 153, 0.4); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 15px; font-weight: 800; color: #34d399; letter-spacing: 1px;">
+                  ${escapeHtml(res.key)}
+                </div>
+                <div style="margin-top: 10px; font-size: 11px; color: var(--text-muted);">Satın Alınma Tarihi: <span style="color: #fff; font-weight: 600;">${escapeHtml(res.date)}</span></div>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <span style="font-size: 12px; color: #34d399; font-weight: 600;">✔ Müşteri bu ürünü satın almıştır. Discord sunucunuzda ticket üzerinden teslimatını güvenle yapabilirsiniz.</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-copy-lookup-key" style="font-weight: 700;">📋 Keyi Kopyala</button>
+            </div>
+          </div>
+        `;
+
+        const copyBtn = document.getElementById("btn-copy-lookup-key");
+        if (copyBtn) {
+          copyBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText(res.key);
+            copyBtn.textContent = "Kopyalandı! ✔";
+            setTimeout(() => { copyBtn.textContent = "📋 Keyi Kopyala"; }, 2000);
+          });
+        }
+      }
+
+      // Bind Lookup Events
+      const lookupBtn = document.getElementById("lookup-btn");
+      const lookupInput = document.getElementById("lookup-key-input");
+      if (lookupBtn) {
+        lookupBtn.addEventListener("click", () => doKeyLookup());
+      }
+      if (lookupInput) {
+        lookupInput.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") doKeyLookup();
+        });
+      }
+
+      // Shopier Cleanup Button
+      const cleanupBtn = document.getElementById("btn-cleanup-shopier");
+      if (cleanupBtn) {
+        cleanupBtn.addEventListener("click", async () => {
+          cleanupBtn.textContent = "Temizleniyor...";
+          cleanupBtn.disabled = true;
+          try {
+            const res = await fetch(API_BASE + "/api/admin/shopier/cleanup");
+            const data = await res.json();
+            alert("Shopier geçici bakiye yükleme ürünleri temizlendi!");
+            loadDashboardData();
+          } catch (e) {
+            alert("Temizleme hatası: " + e.message);
+          } finally {
+            cleanupBtn.textContent = "🧹 Shopier Geçici Ürünlerini Temizle";
+            cleanupBtn.disabled = false;
+          }
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      // End of auth & setup block
+  
+      // ==========================================
+      // ÇEKİLİŞ YÖNETİMİ (GIVEAWAY) - MODERN SVG & LUXURY DESIGN
+      // ==========================================
+      function renderGiveaways() {
+        const box = document.getElementById("admin-active-gw-box");
+        const tbody = document.getElementById("admin-past-gw-tbody");
+        const gws = appData.giveaways || [];
+
+        const activeGw = gws.find(g => g.status === 'active');
+        const pastGws = gws.filter(g => g.status === 'ended');
+
+        // Render Active Giveaway Box
+        if (box) {
+          if (!activeGw) {
+            box.innerHTML = `
+              <div style="text-align: center; padding: 48px 16px; color: var(--text-muted);">
+                <div style="width: 58px; height: 58px; margin: 0 auto 14px; border-radius: 18px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); display: flex; align-items: center; justify-content: center; color: #fbbf24; box-shadow: 0 0 25px rgba(245, 158, 11, 0.15);">
+                  <svg style="width: 28px; height: 28px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v13m0-13V4.5A2.5 2.5 0 009.5 2C8.12 2 7 3.12 7 4.5 7 7.5 12 8 12 8zm0 0v13m0-13V4.5A2.5 2.5 0 0114.5 2C15.88 2 17 3.12 17 4.5 17 7.5 12 8 12 8zM3 8h18v4H3V8zm2 4v7a2 2 0 002 2h10a2 2 0 002-2v-7H5z"/></svg>
+                </div>
+                <div style="font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 4px;">Şu Anda Devam Eden Aktif Çekiliş Yok</div>
+                <div style="font-size: 12px; color: var(--text-muted); max-width: 260px; margin: 0 auto;">Sol taraftaki form üzerinden yeni bir bakiye veya lisans çekilişi başlatabilirsiniz.</div>
+              </div>
+            `;
+          } else {
+            const participants = activeGw.participants || [];
+            box.innerHTML = `
+              <div style="background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 16px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+                  <div>
+                    <span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); font-weight: 800; font-size: 10px; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 5px;">
+                      <span style="width: 6px; height: 6px; border-radius: 50%; background: #fbbf24; display: inline-block;"></span>
+                      CANLI AKTİF ÇEKİLİŞ
+                    </span>
+                    <h4 style="font-size: 17px; font-weight: 800; color: #fff; margin: 0;">${escapeHtml(activeGw.title)}</h4>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${escapeHtml(activeGw.description || '')}</div>
+                  </div>
+                  <div style="text-align: right; background: rgba(0,0,0,0.3); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(245,158,11,0.2);">
+                    <div style="font-size: 10px; color: var(--text-muted); font-weight: 600;">Ödül Değeri</div>
+                    <div style="font-size: 16px; font-weight: 800; color: #fbbf24;">${escapeHtml(activeGw.prize)}</div>
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 10px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+                      <svg style="width: 12px; height: 12px; color: #fbbf24;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                      <span>Talihli</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 700; color: #fff; margin-top: 2px;">${activeGw.winnerCount || 1} Kişi</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 10px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+                      <svg style="width: 12px; height: 12px; color: #34d399;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                      <span>Katılımcı</span>
+                    </div>
+                    <div style="font-size: 13px; font-weight: 700; color: #34d399; margin-top: 2px;">${participants.length} Kişi</div>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 10px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 10px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 4px;">
+                      <svg style="width: 12px; height: 12px; color: #60a5fa;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      <span>Başlangıç</span>
+                    </div>
+                    <div style="font-size: 11px; font-weight: 600; color: #fff; margin-top: 3px; font-family: monospace;">${activeGw.createdAt ? activeGw.createdAt.split(' ')[1] : '-'}</div>
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                  <div style="font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); margin-bottom: 8px;">Katılan Kullanıcılar (${participants.length}):</div>
+                  <div style="max-height: 95px; overflow-y: auto; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px;">
+                    ${participants.length ? participants.map(p => `
+                      <span style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; font-size: 11px; color: #fff;">
+                        ${p.avatar ? `<img src="${p.avatar}" style="width: 16px; height: 16px; border-radius: 50%; object-fit: cover;" />` : ''}
+                        <span style="font-weight: 600;">${escapeHtml(p.user)}</span>
+                      </span>
+                    `).join('') : '<span style="font-size: 11px; color: var(--text-muted); padding: 4px;">Henüz kullanıcı katılmadı.</span>'}
+                  </div>
+                </div>
+
+                <button id="btn-draw-giveaway" class="btn btn-success" style="width: 100%; padding: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 18px rgba(16,185,129,0.35); border: none; border-radius: 12px; cursor: pointer;">
+                  <svg style="width: 16px; height: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                  <span>Kazananı Belirle (Çekilişi Bitir & Discord'da Duyur)</span>
+                </button>
+              </div>
+            `;
+
+            const btnDraw = document.getElementById("btn-draw-giveaway");
+            if (btnDraw) {
+              btnDraw.addEventListener("click", async () => {
+                if (!participants.length) {
+                  alert("Çekilişe henüz kimse katılmadığı için kazanan seçilemez.");
+                  return;
+                }
+                if (!confirm(`Aktif çekilişi bitirip ${participants.length} katılımcı arasından ${activeGw.winnerCount || 1} kazananı rastgele seçmek istediğinize emin misiniz? Kazananlar Discord kanalında duyurulacaktır!`)) {
+                  return;
+                }
+
+                btnDraw.disabled = true;
+                btnDraw.innerHTML = '<span>Çekiliş yapılıyor... ⏳</span>';
+
+                try {
+                  const res = await fetch(API_BASE + "/api/admin/giveaway/draw", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ giveawayId: activeGw.id })
+                  });
+                  const d = await res.json();
+                  if (d.success) {
+                    const wNames = (d.winners || []).map(w => w.user).join(", ");
+                    alert(`🎊 Çekiliş başarıyla tamamlandı!\nKazanan(lar): ${wNames}\nDiscord duyurusu paylaşıldı!`);
+                    loadDashboardData();
+                  } else {
+                    alert("Hata: " + (d.error || "Çekiliş yapılamadı"));
+                    btnDraw.disabled = false;
+                    btnDraw.innerHTML = `<span>Kazananı Belirle (Çekilişi Bitir & Discord'da Duyur)</span>`;
+                  }
+                } catch (e) {
+                  alert("Bağlantı hatası: " + e.message);
+                  btnDraw.disabled = false;
+                  btnDraw.innerHTML = `<span>Kazananı Belirle (Çekilişi Bitir & Discord'da Duyur)</span>`;
+                }
+              });
+            }
+          }
+        }
+
+        // Render Past Giveaways
+        if (tbody) {
+          if (!pastGws.length) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 28px;">Henüz tamamlanan çekiliş geçmişi yok.</td></tr>`;
+          } else {
+            tbody.innerHTML = pastGws.map(pg => {
+              const wNames = (pg.winners || []).map(w => `
+                <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 11px;">
+                  <svg style="width: 12px; height: 12px;" fill="currentColor" viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                  <span>${escapeHtml(w.user)}</span>
+                </span>
+              `).join(' ') || '<span style="color: var(--text-muted);">-</span>';
+
+              return `
+                <tr>
+                  <td style="font-weight: 700; color: #fff; padding: 12px 16px;">${escapeHtml(pg.title)}</td>
+                  <td style="font-weight: 800; color: #fbbf24; padding: 12px 16px;">${escapeHtml(pg.prize)}</td>
+                  <td style="padding: 12px 16px; color: var(--text-muted);">${(pg.participants || []).length} Katılımcı</td>
+                  <td style="padding: 12px 16px;">${wNames}</td>
+                  <td style="font-size: 11px; color: var(--text-muted); padding: 12px 16px; font-family: monospace;">${pg.drawnAt || pg.createdAt || '-'}</td>
+                </tr>
+              `;
+            }).join('');
+          }
+        }
+      }
+
+      // Giveaway creation form listener
+      const gwForm = document.getElementById("admin-giveaway-form");
+      if (gwForm) {
+        gwForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const title = document.getElementById("gw-title").value.trim();
+          const prize = document.getElementById("gw-prize").value.trim();
+          const winners = Number(document.getElementById("gw-winners").value) || 1;
+          const duration = Number(document.getElementById("gw-duration").value) || 1440;
+          const desc = document.getElementById("gw-desc").value.trim();
+
+          const btn = document.getElementById("btn-create-gw");
+          if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span>Başlatılıyor... ⏳</span>';
+          }
+
+          try {
+            const res = await fetch(API_BASE + "/api/admin/giveaway/create", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                title,
+                prize,
+                winnerCount: winners,
+                durationMinutes: duration,
+                description: desc
+              })
+            });
+            const d = await res.json();
+            if (d.success) {
+              alert(d.message || "Çekiliş başarıyla başlatıldı ve Discord duyurusu paylaşıldı!");
+              gwForm.reset();
+              loadDashboardData();
+            } else {
+              alert("Hata: " + (d.error || "Çekiliş oluşturulamadı"));
+            }
+          } catch (err) {
+            alert("Bağlantı hatası: " + err.message);
+          } finally {
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = `
+                <svg style="width: 16px; height: 16px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span>Çekilişi Başlat & Discord'da Duyur</span>
+              `;
+            }
+          }
+        });
+      }
+
+      // ==========================================
+      // DESTEK TALEPLERİ & ADMIN CANLI SOHBET YÖNETİMİ
+      // ==========================================
+      let activeAdminTicketId = null;
+      let adminChatPollTimer = null;
+      let adminAttachedImage = null;
+
+      // Polling & Opening functions for Admin Chat Modal
+      function startAdminChatPolling(ticketId) {
+        stopAdminChatPolling();
+        adminChatPollTimer = setInterval(() => {
+          if (activeAdminTicketId && activeAdminTicketId === ticketId) {
+            loadAdminChatDetails(ticketId, true);
+          } else {
+            stopAdminChatPolling();
+          }
+        }, 3000);
+      }
+
+      function stopAdminChatPolling() {
+        if (adminChatPollTimer) {
+          clearInterval(adminChatPollTimer);
+          adminChatPollTimer = null;
+        }
+      }
+
+      function openAdminTicketChat(ticketId) {
+        if (!ticketId) return;
+        activeAdminTicketId = ticketId;
+        const modal = document.getElementById("admin-ticket-chat-modal");
+        if (modal) {
+          modal.classList.remove("hidden");
+        }
+        
+        // Reset inputs
+        const txt = document.getElementById("admin-chat-text-input");
+        if (txt) txt.value = "";
+        adminAttachedImage = null;
+        const fi = document.getElementById("admin-chat-file-input");
+        if (fi) fi.value = "";
+        const prevBar = document.getElementById("admin-chat-img-preview-bar");
+        if (prevBar) prevBar.style.display = "none";
+
+        const stream = document.getElementById("admin-chat-messages-stream");
+        if (stream) {
+          stream.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--text-muted); font-size: 12px;">Sohbet yükleniyor... ⏳</div>';
+        }
+
+        loadAdminChatDetails(ticketId);
+        startAdminChatPolling(ticketId);
+      }
+      window.openAdminTicketChat = openAdminTicketChat;
+
+      // Global functions for modal exit
+      function closeAdminChatModal() {
+        stopAdminChatPolling();
+        activeAdminTicketId = null;
+        const modal = document.getElementById("admin-ticket-chat-modal");
+        if (modal) modal.classList.add("hidden");
+      }
+      window.closeAdminChatModal = closeAdminChatModal;
+
+      function closeLightbox() {
+        const modal = document.getElementById("image-lightbox-modal");
+        if (modal) modal.classList.add("hidden");
+      }
+      window.closeLightbox = closeLightbox;
+
+      // Close on Escape Key
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeAdminChatModal();
+          closeLightbox();
+        }
+      });
+
+      let activeTicketStatusFilter = 'all';
+      let activeTicketUserFilter = null;
+
+      function filterTicketsByUser(uName) {
+        activeTicketUserFilter = uName;
+        const tag = document.getElementById("tickets-user-filter-tag");
+        const nameEl = document.getElementById("tickets-user-filter-name");
+        if (tag && nameEl) {
+          nameEl.textContent = uName;
+          tag.style.display = "inline-flex";
+        }
+        renderTickets();
+      }
+      window.filterTicketsByUser = filterTicketsByUser;
+
+      function renderTickets() {
+        const tbody = document.getElementById("tickets-tbody");
+        const countBadge = document.getElementById("tickets-count-badge");
+        const summaryChips = document.getElementById("tickets-summary-chips");
+        let tickets = appData.tickets || [];
+
+        // Apply Search Filter
+        const searchInput = document.getElementById("admin-ticket-search-input");
+        const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        if (q) {
+          tickets = tickets.filter(t => 
+            (t.id && t.id.toLowerCase().includes(q)) ||
+            (t.user && t.user.toLowerCase().includes(q)) ||
+            (t.discordId && String(t.discordId).toLowerCase().includes(q)) ||
+            (t.subject && t.subject.toLowerCase().includes(q)) ||
+            (t.category && t.category.toLowerCase().includes(q))
+          );
+        }
+
+        // Apply User Filter
+        if (activeTicketUserFilter) {
+          tickets = tickets.filter(t => 
+            (t.user && t.user.toLowerCase() === activeTicketUserFilter.toLowerCase()) ||
+            (t.discordId && String(t.discordId) === String(activeTicketUserFilter))
+          );
+        }
+
+        // Count per status
+        const allTickets = appData.tickets || [];
+        const openCount = allTickets.filter(t => t.status === 'Açık' || t.status === 'open').length;
+        const repliedCount = allTickets.filter(t => t.status === 'Yetkili Yanıtladı' || t.status === 'answered').length;
+        const pausedCount = allTickets.filter(t => t.status === 'Duraklatıldı' || t.status === 'İnceleniyor').length;
+        const closedCount = allTickets.filter(t => t.status === 'Kapatıldı' || t.status === 'closed').length;
+
+        if (countBadge) {
+          countBadge.textContent = `${tickets.length} / ${allTickets.length} Talep`;
+        }
+
+        // Clickable Summary Status Chips
+        if (summaryChips) {
+          summaryChips.innerHTML = `
+            <button type="button" class="badge" onclick="setAdminTicketFilter('all')" style="cursor: pointer; background: ${activeTicketStatusFilter === 'all' ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.06)'}; color: #fff; border: 1px solid rgba(255,255,255,0.2); font-size: 11px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;">
+              <span>Tümü (${allTickets.length})</span>
+            </button>
+            <button type="button" class="badge" onclick="setAdminTicketFilter('Açık')" style="cursor: pointer; background: ${activeTicketStatusFilter === 'Açık' ? 'rgba(59,130,246,0.3)' : 'rgba(59,130,246,0.12)'}; color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); font-size: 11px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #3b82f6;"></span>
+              <span>Açık (${openCount})</span>
+            </button>
+            <button type="button" class="badge" onclick="setAdminTicketFilter('Yetkili Yanıtladı')" style="cursor: pointer; background: ${activeTicketStatusFilter === 'Yetkili Yanıtladı' ? 'rgba(16,185,129,0.3)' : 'rgba(16,185,129,0.12)'}; color: #34d399; border: 1px solid rgba(16,185,129,0.35); font-size: 11px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+              <span>Yanıtlandı (${repliedCount})</span>
+            </button>
+            <button type="button" class="badge" onclick="setAdminTicketFilter('Duraklatıldı')" style="cursor: pointer; background: ${activeTicketStatusFilter === 'Duraklatıldı' ? 'rgba(245,158,11,0.3)' : 'rgba(245,158,11,0.12)'}; color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); font-size: 11px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;">
+              <span style="width: 7px; height: 7px; border-radius: 50%; background: #f59e0b;"></span>
+              <span>İnceleniyor (${pausedCount})</span>
+            </button>
+            <button type="button" class="badge" onclick="setAdminTicketFilter('Kapatıldı')" style="cursor: pointer; background: ${activeTicketStatusFilter === 'Kapatıldı' ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)'}; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.15); font-size: 11px; padding: 5px 12px; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px;">
+              <span>Kapalı (${closedCount})</span>
+            </button>
+          `;
+        }
+
+        // Apply Status Filter
+        if (activeTicketStatusFilter !== 'all') {
+          tickets = tickets.filter(t => t.status === activeTicketStatusFilter || (activeTicketStatusFilter === 'Duraklatıldı' && t.status === 'İnceleniyor'));
+        }
+
+        if (!tbody) return;
+
+        if (!tickets.length) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 48px;">Aramaya veya filtreye uygun destek talebi bulunamadı.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = tickets.map(t => {
+          const statusColors = {
+            'Açık': 'background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35);',
+            'Yetkili Yanıtladı': 'background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.35);',
+            'İnceleniyor': 'background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35);',
+            'Duraklatıldı': 'background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35);',
+            'Çözüldü': 'background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.35);',
+            'Kapatıldı': 'background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.15);'
+          };
+          const badgeStyle = statusColors[t.status] || statusColors['Açık'];
+          const hasImage = (t.messages && t.messages.some(m => m.image)) || t.image;
+          const msgCount = (t.messages || []).length;
+          const lastMsg = (t.messages && t.messages.length > 0) ? t.messages[t.messages.length - 1].text : t.message;
+
+          // Count how many total tickets this user has
+          const userAllTicketsCount = (allTickets || []).filter(tk => 
+            (tk.user && tk.user.toLowerCase() === (t.user || '').toLowerCase()) ||
+            (t.discordId && t.discordId !== '-' && String(tk.discordId) === String(t.discordId))
+          ).length;
+
+          return `
+            <tr>
+              <td style="padding: 14px 18px;">
+                <div style="font-weight: 700; color: #fff; font-family: monospace; font-size: 11px;">${escapeHtml(t.id || '-')}</div>
+                <div style="font-size: 10px; color: var(--text-muted); margin-top: 3px; font-family: monospace;">${escapeHtml(t.createdAt || '-')}</div>
+              </td>
+              <td style="padding: 14px 18px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  ${t.avatar ? `<img src="${t.avatar}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(59,130,246,0.3);" />` : '<span style="display:inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6;"></span>'}
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <span style="font-weight: 700; color: #fff; font-size: 12px;">${escapeHtml(t.user || 'Misafir')}</span>
+                      ${userAllTicketsCount > 1 ? `<span class="badge" onclick="filterTicketsByUser('${escapeHtml(t.user)}')" style="cursor: pointer; background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); font-size: 10px; padding: 1px 6px; border-radius: 6px;" title="Bu kullanıcının tüm taleplerini listele">${userAllTicketsCount} Talep</span>` : ''}
+                    </div>
+                    <div style="font-size: 10px; color: var(--text-muted); font-family: monospace;">ID: ${escapeHtml(t.discordId || '-')}</div>
+                  </div>
+                </div>
+              </td>
+              <td style="padding: 14px 18px;">
+                <span class="badge" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); font-size: 11px; padding: 3px 8px;">${escapeHtml(t.category || 'Genel')}</span>
+              </td>
+              <td style="max-width: 280px; padding: 14px 18px;">
+                <div style="font-weight: 700; color: #fff; font-size: 12px; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
+                  <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(t.subject || '-')}</span>
+                  ${hasImage ? '<span style="font-size: 10px; padding: 2px 7px; border-radius: 6px; background: rgba(59,130,246,0.18); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;"><svg style="width:11px;height:11px" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Görsel</span>' : ''}
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(lastMsg || '-')}</div>
+              </td>
+              <td style="padding: 14px 18px;">
+                <span class="badge" style="${badgeStyle}; padding: 4px 10px; font-weight: 700;">${escapeHtml(t.status || 'Açık')}</span>
+              </td>
+              <td style="text-align: right; white-space: nowrap; padding: 14px 18px;">
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                  <button type="button" class="btn btn-sm open-admin-chat-btn" data-tid="${escapeHtml(t.id)}" onclick="openAdminTicketChat('${escapeHtml(t.id)}')" style="background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff; font-weight: 700; border: none; padding: 7px 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border-radius: 9px; box-shadow: 0 4px 15px rgba(59,130,246,0.25);">
+                    <svg style="width:14px;height:14px" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span>Sohbet & Yönet (${msgCount})</span>
+                  </button>
+
+                  <select class="form-select status-select-btn" data-tid="${escapeHtml(t.id)}" style="padding: 6px 10px; font-size: 11px; border-radius: 9px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; cursor: pointer;">
+                    <option value="Açık" ${t.status === 'Açık' ? 'selected' : ''}>🟢 Açık</option>
+                    <option value="Yetkili Yanıtladı" ${t.status === 'Yetkili Yanıtladı' ? 'selected' : ''}>💬 Yanıtlandı</option>
+                    <option value="Duraklatıldı" ${t.status === 'Duraklatıldı' ? 'selected' : ''}>⏸️ Duraklat</option>
+                    <option value="Çözüldü" ${t.status === 'Çözüldü' ? 'selected' : ''}>✅ Çözüldü</option>
+                    <option value="Kapatıldı" ${t.status === 'Kapatıldı' ? 'selected' : ''}>🔒 Kapat</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        // Wire open chat buttons
+        document.querySelectorAll(".open-admin-chat-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const tid = btn.getAttribute("data-tid");
+            openAdminTicketChat(tid);
+          });
+        });
+
+        // Wire status select changes
+        document.querySelectorAll(".status-select-btn").forEach(sel => {
+          sel.addEventListener("change", async (e) => {
+            const tid = e.target.getAttribute("data-tid");
+            const newStatus = e.target.value;
+            await updateTicketStatus(tid, newStatus);
+          });
+        });
+      }
+
+      function setAdminTicketFilter(filter) {
+        activeTicketStatusFilter = filter;
+        renderTickets();
+      }
+      window.setAdminTicketFilter = setAdminTicketFilter;
+
+      // Bind search input & clear filter events
+      const searchInputEl = document.getElementById("admin-ticket-search-input");
+      if (searchInputEl) {
+        searchInputEl.addEventListener("input", () => renderTickets());
+      }
+      const clearUserFilterBtn = document.getElementById("btn-clear-ticket-user-filter");
+      if (clearUserFilterBtn) {
+        clearUserFilterBtn.addEventListener("click", () => {
+          activeTicketUserFilter = null;
+          const tag = document.getElementById("tickets-user-filter-tag");
+          if (tag) tag.style.display = "none";
+          renderTickets();
+        });
+      }
+
+      async function updateTicketStatus(tid, newStatus) {
+        try {
+          const res = await fetch(API_BASE + "/api/admin/ticket/status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ticketId: tid, status: newStatus })
+          });
+          const d = await res.json();
+          if (d.success) {
+            const found = appData.tickets.find(tk => tk.id === tid);
+            if (found) found.status = newStatus;
+            renderTickets();
+            if (activeAdminTicketId === tid) {
+              loadAdminChatDetails(tid, true);
+            }
+          } else {
+            alert("Durum güncellenemedi: " + (d.error || ""));
+          }
+        } catch (err) {
+          alert("Hata: " + err.message);
+        }
+      }
+
+      // Wire Quick Status Action Buttons in Modal Header
+      document.querySelectorAll(".btn-quick-status").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (!activeAdminTicketId) return;
+          const st = btn.getAttribute("data-status");
+          updateTicketStatus(activeAdminTicketId, st);
+        });
+      });
+
+      // Load Ticket & Messages in Admin Chat Modal
+      async function loadAdminChatDetails(ticketId, isSilent = false) {
+        try {
+          const res = await fetch(API_BASE + `/api/support/ticket?id=${encodeURIComponent(ticketId)}`);
+          if (!res.ok) throw new Error("Talep verisi alınamadı");
+          const data = await res.json();
+          const t = data.ticket;
+          if (!t) throw new Error("Talep bulunamadı");
+
+          // Update header
+          const subjEl = document.getElementById("admin-chat-ticket-subject");
+          const idEl = document.getElementById("admin-chat-ticket-id");
+          const userEl = document.getElementById("admin-chat-user-name");
+          const dIdEl = document.getElementById("admin-chat-user-discordid");
+          const catEl = document.getElementById("admin-chat-category-badge");
+          const avEl = document.getElementById("admin-chat-user-avatar");
+          const statusBadge = document.getElementById("admin-chat-status-badge");
+
+          if (subjEl) subjEl.textContent = t.subject || "Destek Talebi";
+          if (idEl) idEl.textContent = "#" + t.id;
+          if (userEl) userEl.textContent = t.user || "Misafir";
+          if (dIdEl) dIdEl.textContent = "ID: " + (t.discordId || "-");
+          if (catEl) catEl.textContent = t.category || "Genel";
+          if (avEl) avEl.src = t.avatar || "https://cdn.discordapp.com/embed/avatars/0.png";
+
+          const statusColors = {
+            'Açık': 'background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.35);',
+            'Yetkili Yanıtladı': 'background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.35);',
+            'İnceleniyor': 'background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35);',
+            'Duraklatıldı': 'background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35);',
+            'Çözüldü': 'background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.35);',
+            'Kapatıldı': 'background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid rgba(239,68,68,0.35);'
+          };
+          if (statusBadge) {
+            statusBadge.style = statusColors[t.status] || statusColors['Açık'];
+            statusBadge.textContent = t.status || 'Açık';
+          }
+
+          // MULTI-TICKET SWITCHER (Fix: seamless switching between this user's tickets!)
+          const userAllTickets = (appData.tickets || []).filter(tk => 
+            (tk.user && t.user && tk.user.toLowerCase() === t.user.toLowerCase()) ||
+            (t.discordId && t.discordId !== '-' && String(tk.discordId) === String(t.discordId))
+          );
+          const switcherBar = document.getElementById("admin-user-all-tickets-bar");
+          const pillsList = document.getElementById("admin-user-tickets-pills-list");
+          const countLabel = document.getElementById("admin-user-tickets-count-label");
+
+          if (switcherBar && pillsList) {
+            if (userAllTickets.length > 1) {
+              switcherBar.style.display = "block";
+              if (countLabel) countLabel.textContent = `${escapeHtml(t.user)} Kullanıcısının Toplam ${userAllTickets.length} Destek Talebi:`;
+              pillsList.innerHTML = userAllTickets.map(tk => {
+                const isCurrent = tk.id === t.id;
+                const pillBg = isCurrent 
+                  ? 'background: rgba(59,130,246,0.3); border: 1px solid #3b82f6; color: #fff; font-weight: 800;'
+                  : 'background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.7);';
+                return `
+                  <button type="button" onclick="openAdminTicketChat('${escapeHtml(tk.id)}')" style="cursor: pointer; padding: 4px 10px; border-radius: 8px; font-size: 11px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; ${pillBg}" title="${escapeHtml(tk.subject)} (${escapeHtml(tk.status)})">
+                    <span>#${escapeHtml(tk.id.replace('TCK-', ''))}</span>
+                    <span style="opacity: 0.8; max-width: 120px; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(tk.subject)}</span>
+                    <span style="font-size: 9px; padding: 1px 4px; border-radius: 4px; background: rgba(255,255,255,0.1);">${escapeHtml(tk.status)}</span>
+                  </button>
+                `;
+              }).join('');
+            } else {
+              switcherBar.style.display = "none";
+            }
+          }
+
+          // Render messages
+          renderAdminMessageStream(t.messages || [], t.status === 'Kapatıldı');
+
+        } catch (err) {
+          if (!isSilent) {
+            const stream = document.getElementById("admin-chat-messages-stream");
+            if (stream) stream.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 30px;">Hata: ${escapeHtml(err.message)}</div>`;
+          }
+        }
+      }
+
+      function renderAdminMessageStream(messages, isClosedTicket = false) {
+        const stream = document.getElementById("admin-chat-messages-stream");
+        if (!stream) return;
+
+        const closedBannerHtml = isClosedTicket ? `
+          <div style="text-align: center; margin: 10px 0; padding: 10px 16px; border-radius: 12px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #f87171; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>🔒 Bu destek talebi kapatılmıştır. Müşteri artık yeni mesaj yazamaz.</span>
+          </div>
+        ` : '';
+
+        if (!messages.length) {
+          stream.innerHTML = closedBannerHtml + `<div style="text-align: center; color: var(--text-muted); padding: 48px; font-style: italic;">Henüz mesaj bulunmuyor.</div>`;
+          return;
+        }
+
+        const streamHtml = messages.map(m => {
+          if (m.sender === 'system') {
+            return `
+              <div style="text-align: center; margin: 8px 0;">
+                <span style="display: inline-block; padding: 5px 14px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); font-size: 11px;">
+                  ${escapeHtml(m.text || '')} <span style="opacity: 0.5; margin-left: 4px;">${escapeHtml(m.timestamp ? m.timestamp.split(' ')[1] : '')}</span>
+                </span>
+              </div>
+            `;
+          }
+
+          const isAdmin = m.sender === 'admin';
+          const align = isAdmin ? 'align-self: flex-end; align-items: flex-end;' : 'align-self: flex-start; align-items: flex-start;';
+          const bubbleBg = isAdmin 
+            ? 'background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(99,102,241,0.3)); border: 1px solid rgba(99,102,241,0.45); color: #fff; box-shadow: 0 4px 20px rgba(99,102,241,0.15);' 
+            : 'background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff;';
+          const senderLabel = isAdmin ? '🛡️ BadSupDev Ekibi (Siz)' : escapeHtml(m.senderName || 'Müşteri');
+          const senderColor = isAdmin ? '#818cf8' : '#60a5fa';
+
+          return `
+            <div style="display: flex; flex-direction: column; max-width: 80%; ${align}">
+              <div style="display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 11px;">
+                ${!isAdmin ? `<img src="${m.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(59,130,246,0.4);" />` : ''}
+                <span style="font-weight: 700; color: ${senderColor};">${senderLabel}</span>
+                <span style="color: var(--text-muted); font-size: 10px; font-family: monospace;">${escapeHtml(m.timestamp || '')}</span>
+                ${isAdmin ? `<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(99,102,241,0.2); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); font-weight: 700;">YÖNETİCİ</span>` : ''}
+              </div>
+
+              <div style="padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; word-break: break-word; ${bubbleBg}">
+                ${m.text ? `<div>${escapeHtml(m.text)}</div>` : ''}
+                ${m.image ? `
+                  <div style="margin-top: 10px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.18); cursor: pointer;" onclick="openLightbox('${m.image}')">
+                    <img src="${m.image}" style="max-height: 240px; max-width: 100%; border-radius: 8px; object-fit: contain; background: rgba(0,0,0,0.5); display: block;" />
+                    <div style="font-size: 10.5px; color: #93c5fd; padding: 5px 8px; background: rgba(0,0,0,0.4); display: flex; align-items: center; gap: 5px;">
+                      <svg style="width: 12px; height: 12px;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                      <span>Büyütmek İçin Tıklayın</span>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        const fullHtml = streamHtml + closedBannerHtml;
+        if (stream.innerHTML !== fullHtml) {
+          stream.innerHTML = fullHtml;
+          stream.scrollTop = stream.scrollHeight;
+        }
+      }
+
+      // Admin Image Attachment Handling
+      const adminFileInput = document.getElementById("admin-chat-file-input");
+      const adminImgPreviewBar = document.getElementById("admin-chat-img-preview-bar");
+      const adminImgThumb = document.getElementById("admin-chat-img-thumb");
+      const adminImgName = document.getElementById("admin-chat-img-name");
+      const adminImgRemoveBtn = document.getElementById("admin-chat-img-remove-btn");
+
+      if (adminFileInput) {
+        adminFileInput.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          if (file.size > 8 * 1024 * 1024) {
+            alert("Görsel boyutu 8MB'dan küçük olmalıdır.");
+            adminFileInput.value = "";
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (re) => {
+            adminAttachedImage = re.target.result;
+            if (adminImgThumb) adminImgThumb.src = adminAttachedImage;
+            if (adminImgName) adminImgName.textContent = file.name;
+            if (adminImgPreviewBar) adminImgPreviewBar.style.display = "flex";
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      if (adminImgRemoveBtn) {
+        adminImgRemoveBtn.addEventListener("click", () => {
+          adminAttachedImage = null;
+          if (adminFileInput) adminFileInput.value = "";
+          if (adminImgPreviewBar) adminImgPreviewBar.style.display = "none";
+        });
+      }
+
+      // Admin Send Message Form
+      const adminSendForm = document.getElementById("admin-chat-send-form");
+      const adminTextInput = document.getElementById("admin-chat-text-input");
+      const adminSendBtn = document.getElementById("admin-chat-send-btn");
+
+      if (adminSendForm) {
+        adminSendForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          if (!activeAdminTicketId) return;
+
+          const text = adminTextInput ? adminTextInput.value.trim() : "";
+          const image = adminAttachedImage;
+
+          if (!text && !image) {
+            alert("Lütfen bir mesaj yazınız veya görsel ekleyiniz.");
+            return;
+          }
+
+          if (adminSendBtn) {
+            adminSendBtn.disabled = true;
+            adminSendBtn.innerHTML = "<span>İletiliyor... ⏳</span>";
+          }
+
+          try {
+            const res = await fetch(API_BASE + "/api/support/message", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                ticketId: activeAdminTicketId,
+                sender: "admin",
+                senderName: "🛡️ BadSupDev Ekibi",
+                avatar: "https://r.resimlink.com/5V3oM6.png",
+                text: text,
+                image: image
+              })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+              if (adminTextInput) adminTextInput.value = "";
+              adminAttachedImage = null;
+              if (adminFileInput) adminFileInput.value = "";
+              if (adminImgPreviewBar) adminImgPreviewBar.style.display = "none";
+              loadAdminChatDetails(activeAdminTicketId);
+              loadDashboardData();
+            } else {
+              alert("Mesaj gönderilemedi: " + (data.error || ""));
+            }
+          } catch (err) {
+            alert("Hata: " + err.message);
+          } finally {
+            if (adminSendBtn) {
+              adminSendBtn.disabled = false;
+              adminSendBtn.innerHTML = "<span>Gönder 🚀</span>";
+            }
+          }
+        });
+      }
+
+      // Lightbox Functions
+      window.openLightbox = function(src) {
+        const modal = document.getElementById("image-lightbox-modal");
+        const img = document.getElementById("lightbox-img");
+        if (modal && img) {
+          img.src = src;
+          modal.classList.remove("hidden");
+        }
+      };
+
+      const closeLightboxBtn = document.getElementById("close-lightbox-btn");
+      const lightboxModal = document.getElementById("image-lightbox-modal");
+      if (closeLightboxBtn) {
+        closeLightboxBtn.addEventListener("click", () => {
+          closeLightbox();
+        });
+      }
+      if (lightboxModal) {
+        lightboxModal.addEventListener("click", () => {
+          closeLightbox();
+        });
+      }
+
+      // Initial view and data launch
+      updateView();
+    </script>
+</body>
+</html>

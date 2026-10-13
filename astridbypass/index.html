@@ -1,0 +1,2034 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>BadSupDev — Profesyonel FiveM Scriptleri, Paketleri, Discord Botları ve Web Tasarımları</title>
+  <meta name="description" content="Gelişmiş FiveM QBCore & ESX paketleri, 0.4ms altı optimize scriptler, kurumsal Discord koruma botları ve modern web tasarımları. BadSupDev ile projenizi zirveye taşıyın."/>
+  <link rel="icon" href="./brand-mark.png"/>
+  <link rel="apple-touch-icon" href="./brand-mark.png"/>
+  <link rel="stylesheet" href="./_next/static/css/app/layout.css"/>
+  <style>
+    /* Slow floating motion for BadSupDev Logo */
+    @keyframes logoSlowFloat {
+      0%, 100% {
+        transform: translateY(0px) scale(1) rotate(0deg);
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+      }
+      50% {
+        transform: translateY(-16px) scale(1.05) rotate(2deg);
+        filter: drop-shadow(0 0 50px rgba(255, 255, 255, 0.4));
+      }
+    }
+    .logo-slow-floating {
+      animation: logoSlowFloat 6s ease-in-out infinite;
+      will-change: transform, filter;
+    }
+    /* Custom Styling for High-End Studio */
+    body {
+      background-color: #0f0f11;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .market-card {
+      background: #141416;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 26px;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .market-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.7);
+    }
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(12px);
+    }
+    .discord-btn {
+      background: #5865F2;
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .discord-btn:hover {
+      background: #4752C4;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(88, 101, 242, 0.4);
+    }
+    
+    /* Category Filter Pills (Modern Segmented Pill Bar) */
+    .cat-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 9px 20px !important;
+      border-radius: 12px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: rgba(255, 255, 255, 0.65) !important;
+      white-space: nowrap !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      text-decoration: none !important;
+    }
+    .cat-pill:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      transform: translateY(-1px);
+    }
+    .cat-pill.active {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border-color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* Badges */
+    .cat-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+    .cat-tag-discord { background: rgba(88, 101, 242, 0.15); color: #818cf8; border: 1px solid rgba(88, 101, 242, 0.3); }
+    .cat-tag-script { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .cat-tag-package { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .cat-tag-web { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+
+    .glow-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  
+    /* Balance Modal Polish */
+    .quick-amt-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+    }
+    .quick-amt-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 10px !important;
+      border-radius: 12px !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      color: #ffffff !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+    }
+    .quick-amt-btn:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+    }
+    .quick-amt-btn.active {
+      background: rgba(16, 185, 129, 0.18) !important;
+      border-color: #10b981 !important;
+      color: #34d399 !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.2) !important;
+    }
+    .trust-badges-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 10px !important;
+    }
+    .trust-badge-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.03) !important;
+      border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      padding: 10px 12px !important;
+      font-size: 11px !important;
+      color: rgba(255, 255, 255, 0.75) !important;
+    }
+    .btn-pay-emerald {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 10px !important;
+      width: 100% !important;
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      font-size: 14px !important;
+      letter-spacing: 0.02em !important;
+      border-radius: 16px !important;
+      padding: 15px 24px !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      cursor: pointer !important;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+      text-align: center !important;
+    }
+    .btn-pay-emerald:hover {
+      background: linear-gradient(135deg, #34d399, #10b981) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 14px 35px -5px rgba(16, 185, 129, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    }
+    .btn-pay-emerald:active {
+      transform: translateY(0) scale(0.99) !important;
+    }
+
+  
+    /* ULTRA LUXURY PURCHASE & KEY MODALS (PURE CSS - NO TAILWIND DEPENDENCY) */
+    .buy-modal-card {
+      width: 100% !important;
+      max-width: 480px !important;
+      background: linear-gradient(180deg, #18181d 0%, #0f0f13 100%) !important;
+      border: 1px solid rgba(16, 185, 129, 0.35) !important;
+      border-radius: 26px !important;
+      padding: 30px 26px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(16, 185, 129, 0.15) !important;
+      position: relative !important;
+      text-align: center !important;
+      animation: buyModalIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      margin: auto !important;
+    }
+
+    @keyframes buyModalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-icon-badge {
+      width: 62px !important;
+      height: 62px !important;
+      margin: 0 auto 16px auto !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 20px !important;
+      background: rgba(16, 185, 129, 0.12) !important;
+      border: 1px solid rgba(16, 185, 129, 0.35) !important;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25) !important;
+      color: #34d399 !important;
+      font-size: 28px !important;
+    }
+
+    .modal-summary-box {
+      margin-top: 20px !important;
+      background: rgba(0, 0, 0, 0.55) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 18px !important;
+      padding: 16px 20px !important;
+      text-align: left !important;
+    }
+
+    .modal-summary-row {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      font-size: 13px !important;
+      padding: 6px 0 !important;
+      color: rgba(255, 255, 255, 0.65) !important;
+    }
+    .modal-summary-row.divider {
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+      margin-top: 8px !important;
+      padding-top: 10px !important;
+    }
+
+    .modal-btn-cancel {
+      flex: 1 !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      padding: 13px 20px !important;
+      border-radius: 14px !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      text-align: center !important;
+      text-decoration: none !important;
+    }
+    .modal-btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.14) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    .modal-btn-approve {
+      flex: 1 !important;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      border: none !important;
+      color: #000000 !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      padding: 13px 22px !important;
+      border-radius: 14px !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      text-align: center !important;
+    }
+    .modal-btn-approve:hover {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.65) !important;
+    }
+    .modal-btn-approve:active {
+      transform: translateY(0) scale(0.98) !important;
+    }
+
+    /* 3-SECOND LOADING STATE */
+    .buy-spinner-wrap {
+      position: relative !important;
+      width: 86px !important;
+      height: 86px !important;
+      margin: 10px auto 20px auto !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .buy-spinner-ring {
+      position: absolute !important;
+      inset: 0 !important;
+      border-radius: 50% !important;
+      border: 4px solid rgba(16, 185, 129, 0.15) !important;
+      border-top-color: #10b981 !important;
+      border-right-color: #34d399 !important;
+      animation: buySpinAnim 0.85s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite !important;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.3) !important;
+    }
+    @keyframes buySpinAnim {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .buy-progress-track {
+      width: 100% !important;
+      height: 8px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-radius: 999px !important;
+      overflow: hidden !important;
+      margin: 18px 0 10px 0 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .buy-progress-fill {
+      height: 100% !important;
+      width: 0% !important;
+      background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7) !important;
+      border-radius: 999px !important;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.85) !important;
+      transition: width 0.05s linear !important;
+    }
+
+    /* KEY CARD & COPY BUTTON */
+    .license-key-card {
+      margin-top: 18px !important;
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(0, 0, 0, 0.65) 100%) !important;
+      border: 1px solid rgba(16, 185, 129, 0.4) !important;
+      border-radius: 20px !important;
+      padding: 20px 18px !important;
+      text-align: center !important;
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.15) inset !important;
+    }
+    .license-key-text {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+      font-size: 23px !important;
+      font-weight: 900 !important;
+      letter-spacing: 0.12em !important;
+      color: #34d399 !important;
+      text-shadow: 0 0 20px rgba(52, 211, 153, 0.55) !important;
+      padding: 10px 0 !important;
+      word-break: break-all !important;
+      user-select: all !important;
+    }
+    .btn-copy-glow {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      background: #10b981 !important;
+      color: #000000 !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      padding: 11px 24px !important;
+      border-radius: 12px !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4) !important;
+      margin-top: 10px !important;
+    }
+    .btn-copy-glow:hover {
+      background: #34d399 !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.6) !important;
+    }
+
+
+    /* Bulletproof Dark Styling for Selects, Inputs, and Modals */
+    select, select option {
+      background-color: #16161c !important;
+      color: #ffffff !important;
+      color-scheme: dark !important;
+    }
+    input[type="text"], input[type="number"], textarea {
+      color-scheme: dark !important;
+    }
+    /* Smooth Scrollbar for Modals */
+    .overflow-y-auto::-webkit-scrollbar {
+      width: 5px;
+    }
+    .overflow-y-auto::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 10px;
+    }
+    .overflow-y-auto::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+    }
+    .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+  
+    /* ===== FLOATING LIVE CHAT WIDGET DOCKED TO BOTTOM-RIGHT (Photo 1 & Photo 2) ===== */
+    #support-modal {
+      position: fixed !important;
+      inset: auto !important;
+      top: auto !important;
+      left: auto !important;
+      bottom: 96px !important;
+      right: 24px !important;
+      width: 420px !important;
+      max-width: calc(100vw - 32px) !important;
+      height: 645px !important;
+      max-height: calc(100vh - 120px) !important;
+      z-index: 99990 !important;
+      background: #0b0b12 !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 26px !important;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(99, 102, 241, 0.15) !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      box-sizing: border-box !important;
+      user-select: auto !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      backdrop-filter: blur(25px) !important;
+      -webkit-backdrop-filter: blur(25px) !important;
+    }
+
+    #support-modal.support-widget-maximized {
+      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      right: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      max-height: none !important;
+      border-radius: 0 !important;
+      border: none !important;
+    }
+
+    #support-modal.hidden {
+      display: none !important;
+    }
+
+    /* Support Modal Custom Scrollbar */
+    #support-modal .overflow-y-auto::-webkit-scrollbar {
+      width: 4px !important;
+    }
+    #support-modal .overflow-y-auto::-webkit-scrollbar-track {
+      background: transparent !important;
+    }
+    #support-modal .overflow-y-auto::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1) !important;
+      border-radius: 999px !important;
+    }
+    #support-modal .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    /* Top Action Card ("Bize bir mesaj gonderin") */
+    .support-top-action-card {
+      padding: 14px 16px !important;
+      border-radius: 20px !important;
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.25) 0%, rgba(129, 140, 248, 0.15) 100%) !important;
+      border: 1px solid rgba(199, 210, 254, 0.35) !important;
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      margin-bottom: 14px !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+    }
+    .support-top-action-card:hover {
+      background: linear-gradient(135deg, rgba(165, 180, 252, 0.35) 0%, rgba(129, 140, 248, 0.22) 100%) !important;
+      border-color: rgba(199, 210, 254, 0.55) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25) !important;
+    }
+    .support-top-action-icon {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      border-radius: 14px !important;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.3) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Filter Pills 4-Grid matching photo */
+    #support-filter-pills-bar {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 6px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    #support-filter-pills-bar .ticket-filter-btn {
+      width: 100% !important;
+      padding: 7px 2px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      border-radius: 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+    #support-filter-pills-bar .ticket-filter-btn:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+    #support-filter-pills-bar .ticket-filter-btn.active-filter {
+      background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
+      box-shadow: 0 4px 18px rgba(167, 139, 250, 0.45) !important;
+      font-weight: 800 !important;
+    }
+
+    /* Ticket Card & Custom Badges */
+    .ticket-item-card {
+      padding: 13px 14px !important;
+      border-radius: 18px !important;
+      background: #12121a !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    }
+    .ticket-item-card:hover {
+      background: #161622 !important;
+      border-color: rgba(99, 102, 241, 0.35) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.12) !important;
+    }
+    .ticket-item-logo-box {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      border-radius: 14px !important;
+      background: #171724 !important;
+      border: 1px solid rgba(99, 102, 241, 0.25) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    }
+    .ticket-badge-open {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 3px 11px !important;
+      border-radius: 9999px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      background: rgba(20, 184, 166, 0.16) !important;
+      color: #2dd4bf !important;
+      border: 1px solid rgba(45, 212, 191, 0.35) !important;
+      line-height: 1.2 !important;
+      flex-shrink: 0 !important;
+    }
+    .ticket-badge-open .badge-dot {
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
+      background: #2dd4bf !important;
+      box-shadow: 0 0 6px #2dd4bf !important;
+    }
+    .ticket-badge-answered {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 3px 11px !important;
+      border-radius: 9999px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      background: rgba(16, 185, 129, 0.16) !important;
+      color: #34d399 !important;
+      border: 1px solid rgba(52, 211, 153, 0.35) !important;
+      line-height: 1.2 !important;
+      flex-shrink: 0 !important;
+    }
+    .ticket-badge-answered .badge-dot {
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
+      background: #34d399 !important;
+      box-shadow: 0 0 6px #34d399 !important;
+    }
+    .ticket-badge-closed {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 3px 11px !important;
+      border-radius: 9999px !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: rgba(255, 255, 255, 0.5) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      line-height: 1.2 !important;
+      flex-shrink: 0 !important;
+    }
+    .ticket-badge-closed .badge-dot {
+      width: 6px !important;
+      height: 6px !important;
+      border-radius: 50% !important;
+      background: rgba(255, 255, 255, 0.4) !important;
+    }
+
+    /* Footer: 3 Balanced Tabs matching photo */
+    #support-modal footer, #support-modal-footer {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 10px !important;
+      width: 100% !important;
+      height: 58px !important;
+      min-height: 58px !important;
+      max-height: 58px !important;
+      padding: 7px 14px !important;
+      box-sizing: border-box !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+      background: #09090e !important;
+      flex-shrink: 0 !important;
+    }
+    .support-footer-tab {
+      width: 100% !important;
+      height: 44px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      border-radius: 14px !important;
+      text-decoration: none !important;
+      transition: all 0.2s ease !important;
+      user-select: none !important;
+      cursor: pointer !important;
+      color: rgba(255, 255, 255, 0.4) !important;
+      border: 1px solid transparent !important;
+    }
+    .support-footer-tab span {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+    }
+    .support-footer-tab.active {
+      color: #a5b4fc !important;
+      background: rgba(99, 102, 241, 0.08) !important;
+      border: 1px solid rgba(99, 102, 241, 0.45) !important;
+      box-shadow: 0 2px 12px rgba(99, 102, 241, 0.12) !important;
+    }
+    .support-footer-tab:hover:not(.active) {
+      color: rgba(255, 255, 255, 0.8) !important;
+      background: rgba(255, 255, 255, 0.04) !important;
+    }
+
+    /* ===== FLOATING LIVE CHAT LAUNCHER BUTTON ===== */
+    #floating-support-btn {
+      position: fixed !important;
+      bottom: 24px !important;
+      right: 24px !important;
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 40%, #6366f1 100%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.35) !important;
+      box-shadow: 0 12px 35px rgba(99, 102, 241, 0.55), 0 0 25px rgba(165, 180, 252, 0.45) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 99999 !important;
+      cursor: pointer !important;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      user-select: none !important;
+      outline: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    #floating-support-btn:hover {
+      transform: scale(1.08) !important;
+      box-shadow: 0 16px 40px rgba(99, 102, 241, 0.7), 0 0 35px rgba(165, 180, 252, 0.55) !important;
+    }
+    #floating-support-btn:active {
+      transform: scale(0.95) !important;
+    }
+    #floating-support-btn.widget-active {
+      background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 40%, #6366f1 100%) !important;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.6) !important;
+    }
+
+    /* Floating Chat Bubble Tooltip */
+    #floating-support-bubble,
+    .floating-chat-bubble {
+      position: fixed !important;
+      bottom: 96px !important;
+      right: 24px !important;
+      background: #14141c !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 18px !important;
+      padding: 12px 15px !important;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(99, 102, 241, 0.15) !important;
+      z-index: 99998 !important;
+      max-width: 270px !important;
+      cursor: pointer !important;
+      transition: all 0.25s ease !important;
+      user-select: none !important;
+      animation: floatBubbleBounce 4s ease-in-out infinite alternate !important;
+    }
+    @keyframes floatBubbleBounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+    #floating-support-bubble.hidden,
+    .floating-chat-bubble.hidden {
+      display: none !important;
+    }
+    .floating-bubble-arrow {
+      position: absolute !important;
+      bottom: -6px !important;
+      right: 24px !important;
+      width: 12px !important;
+      height: 12px !important;
+      background: #14141c !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+      transform: rotate(45deg) !important;
+    }
+
+    @media (max-width: 480px) {
+      #support-modal {
+        bottom: 88px !important;
+        right: 12px !important;
+        left: 12px !important;
+        width: auto !important;
+        max-width: none !important;
+        height: calc(100vh - 100px) !important;
+        border-radius: 20px !important;
+      }
+      #floating-support-btn {
+        bottom: 18px !important;
+        right: 18px !important;
+        width: 56px !important;
+        height: 56px !important;
+      }
+      #floating-support-bubble {
+        bottom: 84px !important;
+        right: 18px !important;
+      }
+    }
+
+    /* Support Form Categories & Priority Grid */
+    .support-cats-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 8px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .category-card {
+      padding: 10px 8px !important;
+      border-radius: 12px !important;
+      background: #141418 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      gap: 6px !important;
+      user-select: none !important;
+    }
+    .category-card:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.2) !important;
+      color: #ffffff !important;
+    }
+    .category-card.active-cat {
+      background: rgba(99, 102, 241, 0.15) !important;
+      border-color: rgba(99, 102, 241, 0.45) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+    }
+
+    .priority-chips-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 6px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .priority-chip {
+      padding: 7px 4px !important;
+      border-radius: 10px !important;
+      background: #141418 !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: rgba(255, 255, 255, 0.6) !important;
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 5px !important;
+      user-select: none !important;
+      text-align: center !important;
+    }
+    .priority-chip:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+    }
+    .priority-chip.active-priority {
+      background: rgba(99, 102, 241, 0.15) !important;
+      border-color: rgba(99, 102, 241, 0.4) !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2) !important;
+      font-weight: 700 !important;
+    }
+
+  
+    
+
+    
+
+    @media (max-width: 768px) {
+      
+      
+    }
+
+    /* ===== CUSTOM CYBER BACKGROUND ARTWORK (GTA VI SOLA & DISCORD SAĞA DAYALI) ===== */
+    .site-bg__art {
+      position: absolute !important;
+      pointer-events: none !important;
+      background-repeat: no-repeat !important;
+      transition: opacity 0.3s ease !important;
+    }
+
+    .site-bg__art--gta {
+      left: clamp(-110px, -6.5vw, -25px) !important;
+      top: 50px !important;
+      width: min(680px, 48vw) !important;
+      height: min(720px, 86vh) !important;
+      background-image: url('./hero-bg-gta.png') !important;
+      background-position: left center !important;
+      background-size: contain !important;
+      opacity: 0.36 !important;
+      -webkit-mask-image: radial-gradient(ellipse 95% 90% at 30% 50%, black 50%, transparent 95%) !important;
+      mask-image: radial-gradient(ellipse 95% 90% at 30% 50%, black 50%, transparent 95%) !important;
+      filter: saturate(1.2) contrast(1.08) drop-shadow(0 0 50px rgba(236, 72, 153, 0.28)) !important;
+    }
+
+    .site-bg__art--discord {
+      right: clamp(-90px, -5vw, -20px) !important;
+      top: 60px !important;
+      width: min(410px, 30vw) !important;
+      height: min(640px, 84vh) !important;
+      background-image: url('./hero-bg-discord.png') !important;
+      background-position: right center !important;
+      background-size: contain !important;
+      opacity: 0.38 !important;
+      -webkit-mask-image: radial-gradient(ellipse 95% 90% at 70% 50%, black 50%, transparent 95%) !important;
+      mask-image: radial-gradient(ellipse 95% 90% at 70% 50%, black 50%, transparent 95%) !important;
+      filter: saturate(1.2) contrast(1.08) drop-shadow(0 0 50px rgba(99, 102, 241, 0.3)) !important;
+    }
+
+    @media (max-width: 1024px) {
+      .site-bg__art--gta {
+        left: clamp(-110px, -6.5vw, -25px) !important;
+        width: min(520px, 58vw) !important;
+        opacity: 0.22 !important;
+      }
+      .site-bg__art--discord {
+        right: -40px !important;
+        width: min(340px, 40vw) !important;
+        opacity: 0.22 !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .site-bg__art--gta {
+        left: clamp(-110px, -6.5vw, -25px) !important;
+        width: 85vw !important;
+        opacity: 0.16 !important;
+        top: 80px !important;
+      }
+      .site-bg__art--discord {
+        display: none !important;
+      }
+    }
+
+    /* ===== SUPPORT MODAL ANTI-OVERLAP & SPACING REFINEMENTS ===== */
+    #support-modal .support-top-action-card {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 14px !important;
+      padding: 13px 16px !important;
+    }
+    #support-modal .support-top-action-card > div:first-child {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      min-width: 0 !important;
+      flex: 1 !important;
+    }
+    #support-modal .support-top-action-icon {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      max-width: 44px !important;
+      flex-shrink: 0 !important;
+    }
+    #support-modal .ticket-item-card {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      padding: 12px 14px !important;
+    }
+    #support-modal .ticket-item-card > div:first-child {
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      min-width: 0 !important;
+      flex: 1 1 auto !important;
+    }
+    #support-modal .ticket-item-logo-box {
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      max-width: 44px !important;
+      flex-shrink: 0 !important;
+    }
+    #support-modal .ticket-item-card .truncate {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    #support-modal .ticket-filter-btn {
+      font-size: 10.5px !important;
+      padding: 7px 4px !important;
+      white-space: nowrap !important;
+    }
+
+    /* Floating Button Red Notification Badge */
+    #floating-unread-badge {
+      position: absolute !important;
+      top: -3px !important;
+      right: -3px !important;
+      min-width: 20px !important;
+      height: 20px !important;
+      padding: 0 4px !important;
+      border-radius: 9999px !important;
+      background: #ef4444 !important;
+      color: #ffffff !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      line-height: 1 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border: 2px solid #0c0c10 !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.75) !important;
+      z-index: 100000 !important;
+      pointer-events: none !important;
+      box-sizing: border-box !important;
+      animation: redBadgePulse 2s infinite ease-in-out !important;
+    }
+    #floating-unread-badge.hidden {
+      display: none !important;
+    }
+    @keyframes redBadgePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+      50% { transform: scale(1.15); box-shadow: 0 0 16px rgba(239, 68, 68, 0.95); }
+    }
+
+    /* Header action buttons styling & hover effects */
+    #support-modal .support-modal-header {
+      height: 64px !important;
+      min-height: 64px !important;
+      padding: 0 18px !important;
+    }
+    #support-modal .header-action-btn:hover {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(255, 255, 255, 0.22) !important;
+      color: #ffffff !important;
+    }
+</style>
+
+  <style id="bsd-ui-polish">
+    /* ===== UI polish: SVG icons, market layout, user pill =====
+       Not: Derlenmis Tailwind dosyasinda mb-12, mt-12, pl-1.5, pr-2.5, max-w-[100px], bg-[#161619] gibi
+       siniflar bulunmadigi icin bu bolumler kendi siniflariyla stillendirildi. */
+    .bsd-ico { width: 16px; height: 16px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+
+    /* Hero: Bakiye Yukle butonu */
+    .hero-balance-btn { display: inline-flex; align-items: center; gap: 9px; }
+    .hero-balance-btn .bsd-ico { width: 18px; height: 18px; color: #34d399; transition: transform .2s ease; }
+    .hero-balance-btn:hover .bsd-ico { transform: translateY(-1px) rotate(-6deg); }
+
+    /* Market: baslik, filtre, grid */
+    .market-head { margin-bottom: 28px; }
+    .market-filter-wrap { display: flex; justify-content: center; margin: 0 0 44px; }
+    #market-filter-container { padding: 6px; gap: 6px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); scrollbar-width: none; }
+    #market-filter-container::-webkit-scrollbar { display: none; }
+    .cat-pill { gap: 8px; white-space: nowrap; flex-shrink: 0; }
+    .cat-pill .bsd-ico { width: 15px; height: 15px; opacity: .8; }
+    .cat-pill.active .bsd-ico { opacity: 1; }
+    .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; align-items: stretch; }
+    .market-grid > .col-span-full { grid-column: 1 / -1; }
+    @media (max-width: 640px) { .market-grid { grid-template-columns: 1fr; } .market-filter-wrap { justify-content: flex-start; } }
+
+    /* Market karti */
+    .market-card { overflow: hidden; min-width: 0; height: 100%; }
+    .market-card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(52, 211, 153, .55), transparent); opacity: 0; transition: opacity .3s ease; }
+    .market-card:hover::before { opacity: 1; }
+    .mc-body { flex: 1 1 auto; padding-bottom: 20px; }
+    .mc-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .mc-title { margin-top: 18px; font-size: 20px; font-weight: 800; line-height: 1.25; color: #fff; letter-spacing: -.01em; overflow-wrap: anywhere; }
+    .mc-desc { margin-top: 8px; font-size: 12.5px; line-height: 1.6; color: rgba(255, 255, 255, .55); overflow-wrap: anywhere; }
+    .mc-features { margin: 18px 0 0; padding: 16px 0 0; border-top: 1px solid rgba(255, 255, 255, .06); list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .mc-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; line-height: 1.45; color: rgba(255, 255, 255, .82); overflow-wrap: anywhere; }
+    .mc-check { flex-shrink: 0; width: 18px; height: 18px; border-radius: 999px; background: rgba(16, 185, 129, .14); color: #34d399;
+      display: inline-flex; align-items: center; justify-content: center; }
+    .mc-check svg { width: 11px; height: 11px; }
+    .mc-footer { margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .06); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .mc-price { font-size: 26px; font-weight: 900; color: #fff; letter-spacing: -.02em; line-height: 1; white-space: nowrap; }
+    .mc-period { margin-top: 6px; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255, 255, 255, .4); }
+    .mc-buy { display: inline-flex; align-items: center; gap: 8px; border-radius: 12px; background: #fff; color: #000; font-size: 12.5px; font-weight: 800;
+      padding: 11px 18px; border: 0; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: transform .15s ease, background .2s ease, box-shadow .2s ease; box-shadow: 0 6px 20px -6px rgba(255, 255, 255, .25); }
+    .mc-buy:hover { background: #f1f1f1; transform: translateY(-1px); box-shadow: 0 10px 26px -8px rgba(255, 255, 255, .35); }
+    .mc-buy:active { transform: scale(.97); }
+    .mc-buy svg { width: 14px; height: 14px; transition: transform .2s ease; }
+    .mc-buy:hover svg { transform: translateX(2px); }
+
+    /* Market alt bilgilendirme kutusu */
+    .market-callout { margin-top: 48px; }
+    .market-callout-icon { color: #34d399; }
+    .market-callout-icon .bsd-ico { width: 22px; height: 22px; }
+    @media (min-width: 640px) { .market-callout { padding: 28px 32px; } }
+
+    /* Ust bar: Discord kullanici kutusu */
+    #auth-header-container { min-width: 0; }
+    .user-pill { display: flex; align-items: center; gap: 6px; max-width: 100%; padding: 4px; border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .1); background: #161619; box-shadow: 0 6px 24px -10px rgba(0, 0, 0, .8); }
+    .user-pill__id { display: flex; align-items: center; gap: 8px; min-width: 0; padding-right: 2px; }
+    .user-pill__avatar { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; flex-shrink: 0; display: block; border: 1px solid rgba(255, 255, 255, .12); }
+    .user-pill__avatar--fallback { display: flex; align-items: center; justify-content: center; background: #5865F2; color: #fff; font-size: 12px; font-weight: 700; }
+    .user-pill__name { font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, .9); max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-pill__bal { flex-shrink: 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 700; color: #34d399;
+      background: rgba(16, 185, 129, .1); border: 1px solid rgba(16, 185, 129, .3); border-radius: 8px; padding: 4px 8px; white-space: nowrap; }
+    .user-pill__btn { flex-shrink: 0; display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 11px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer; border: 1px solid transparent; transition: background .2s ease, border-color .2s ease; }
+    .user-pill__btn svg { width: 13px; height: 13px; }
+    .user-pill__btn--load { background: rgba(255, 255, 255, .08); color: #fff; }
+    .user-pill__btn--load:hover { background: rgba(255, 255, 255, .15); }
+    .user-pill__btn--keys { background: rgba(16, 185, 129, .12); border-color: rgba(16, 185, 129, .3); color: #34d399; }
+    .user-pill__btn--keys:hover { background: rgba(16, 185, 129, .22); }
+    .user-pill__count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: rgba(16, 185, 129, .22);
+      display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+    .user-pill__logout { flex-shrink: 0; width: 28px; height: 28px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+      color: rgba(255, 255, 255, .45); background: transparent; border: 0; cursor: pointer; transition: background .2s ease, color .2s ease; }
+    .user-pill__logout:hover { background: rgba(239, 68, 68, .14); color: #f87171; }
+    .user-pill__logout svg { width: 14px; height: 14px; }
+    @media (max-width: 1100px) { .user-pill__label { display: none; } .user-pill__btn { padding: 0 9px; } .user-pill__name { max-width: 80px; } }
+    @media (max-width: 900px) { .user-pill__name { display: none; } }
+
+    .mc-buy:focus-visible, .cat-pill:focus-visible, .user-pill button:focus-visible, .hero-balance-btn:focus-visible { outline: 2px solid #34d399; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      .market-card, .market-card:hover, .mc-buy, .mc-buy svg, .hero-balance-btn .bsd-ico { transition: none !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body class="__variable_f367f3 __variable_6b9622 font-sans bg-[#0f0f11] text-white">
+
+  <!-- Ambient Glows -->
+  <div class="site-bg" aria-hidden="true">
+    <div class="site-bg__glow"></div>
+    <div class="site-bg__glow site-bg__glow--2"></div>
+    <div class="site-bg__grid"></div>
+    <!-- Transparent Background Artwork: GTA VI Left, Discord Mascot Right -->
+    <div class="site-bg__art site-bg__art--gta"></div>
+    <div class="site-bg__art site-bg__art--discord"></div>
+  </div>
+
+  <div class="relative z-10 flex min-h-screen flex-col">
+    <!-- STICKY HEADER -->
+    <header class="site-header sticky top-0 z-40 border-b border-white/[0.06] bg-[#0f0f11]/85 backdrop-blur-md">
+      <div class="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-8">
+        <!-- Logo -->
+        <a class="flex items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-white transition hover:opacity-90 shrink-0" href="#home">
+          <img src="./brand-mark.png" alt="BadSupDev Logo" class="h-8 w-8 object-contain mix-blend-screen"/>
+          <span class="font-bold tracking-normal">BadSupDev</span>
+        </a>
+
+        <!-- Navigation Links (Spacious, No-Wrap, Sleek Hover Pills) -->
+        <nav class="hidden items-center gap-1.5 lg:gap-2.5 text-[13px] font-medium text-white/60 md:flex whitespace-nowrap shrink-0">
+          <a class="px-3 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition whitespace-nowrap shrink-0" href="#home">Ana Sayfa</a>
+          <a class="px-3 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition whitespace-nowrap shrink-0" href="#market">Market & Ürünler</a>
+          <a class="px-3 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition whitespace-nowrap shrink-0" href="#features">Neden Biz?</a>
+          <a class="px-3 py-1.5 rounded-full hover:text-white hover:bg-white/[0.06] transition whitespace-nowrap shrink-0" href="#faq">Sıkça Sorulanlar</a>
+        </nav>
+
+        <!-- Right Header Actions (Auth / Balance) -->
+        <div class="flex items-center gap-2.5 shrink-0">
+          <div id="auth-header-container">
+            <!-- Dynamic Discord Auth or Login Button injected via astrid.js -->
+            <button type="button" id="login-nav-btn" class="discord-btn inline-flex items-center gap-2 rounded-full px-4 py-2 text-[12px] font-semibold text-white shadow-sm hover:shadow">
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+              <span>Discord Giriş</span>
+            </button>
+          </div>
+
+          <a href="#market" class="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-[12px] font-semibold text-black transition hover:bg-white/90">
+            <span>Mağaza</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-teal-400/60 via-emerald-400/35 to-transparent"></div>
+    </header>
+
+    <main class="flex-1">
+      <!-- HERO SECTION -->
+      <section id="home" class="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <div class="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[11px] font-semibold tracking-wider text-white/80 uppercase">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>PROFESYONEL GELİŞTİRİCİ ÇÖZÜMLERİ</span>
+              </div>
+
+              <h1 class="mt-6 font-display text-4xl font-bold tracking-tight text-white sm:text-6xl sm:leading-[1.1]">
+                Sunucunu Büyüt.<br/>
+                <span class="text-white/60">Güçlü, Hızlı, Kusursuz.</span>
+              </h1>
+
+              <p class="mt-5 text-base leading-relaxed text-white/55 sm:text-lg">
+                BadSupDev ile en güncel FiveM QBCore & ESX paketleri, 0.4ms altı optimize scriptler, kurumsal Discord koruma/yetkili botları ve modern web tasarımları tek çatı altında.
+              </p>
+
+              <!-- Action buttons -->
+              <div class="mt-8 flex flex-wrap items-center gap-3">
+                <a href="#market" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition hover:bg-white/90">
+                  Ürünleri İncele
+                </a>
+                <button type="button" class="open-balance-btn hero-balance-btn rounded-full border border-white/20 bg-white/[0.05] px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.1]">
+                  <svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+                  <span>Bakiye Yükle</span>
+                </button>
+              </div>
+
+              <!-- MOVING PAYMENT MARQUEE (SHOPIER, IBAN, FAST ONLY) -->
+              <div class="pay-strip relative mt-10 max-w-lg overflow-hidden">
+                <div class="pay-strip__track flex w-max items-center">
+                  <!-- Set 1 -->
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="inline-flex items-center gap-2 text-white/60 font-semibold text-sm">
+                      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
+                      Shopier
+                    </span>
+                  </span>
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="text-[16px] font-bold tracking-[0.14em] text-white/60">IBAN</span>
+                  </span>
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="font-display text-[18px] font-black italic tracking-tight text-white/60">FAST</span>
+                  </span>
+                  <!-- Set 2 -->
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="inline-flex items-center gap-2 text-white/60 font-semibold text-sm">
+                      <svg viewBox="0 0 24 24" class="h-4 w-4" fill="currentColor"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
+                      Shopier
+                    </span>
+                  </span>
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="text-[16px] font-bold tracking-[0.14em] text-white/60">IBAN</span>
+                  </span>
+                  <span class="inline-flex shrink-0 items-center px-6">
+                    <span class="font-display text-[18px] font-black italic tracking-tight text-white/60">FAST</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Graphic Right -->
+            <div class="relative flex items-center justify-center">
+              <div class="relative w-full max-w-[420px] aspect-square flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500/10 via-transparent to-white/5 blur-3xl"></div>
+                <img src="./brand-mark.png" alt="BadSupDev" class="relative z-10 w-72 h-72 object-contain mix-blend-screen drop-shadow-[0_0_35px_rgba(255,255,255,0.15)] animate-pulse"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI COUNTERS -->
+          <div class="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div class="rounded-2xl border border-white/[0.06] bg-[#141416] p-6 text-center">
+              <p class="font-display text-3xl font-bold text-white">100+</p>
+              <p class="mt-1 text-xs text-white/45">Aktif Müşteri</p>
+            </div>
+            <div class="rounded-2xl border border-white/[0.06] bg-[#141416] p-6 text-center">
+              <p class="font-display text-3xl font-bold text-white">0.4ms</p>
+              <p class="mt-1 text-xs text-white/45">Düşük Resmon Tüketimi</p>
+            </div>
+            <div class="rounded-2xl border border-white/[0.06] bg-[#141416] p-6 text-center">
+              <p class="font-display text-3xl font-bold text-white">7/24</p>
+              <p class="mt-1 text-xs text-white/45">Discord & Ticket Destek</p>
+            </div>
+            <div class="rounded-2xl border border-white/[0.06] bg-[#141416] p-6 text-center">
+              <p class="font-display text-3xl font-bold text-white">Anında</p>
+              <p class="mt-1 text-xs text-white/45">Otomatik Teslimat</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BRAND BANNER SHOWCASE (SLOW FLOATING LOGO ONLY) -->
+      <section class="py-10">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <div class="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0c0c0e] shadow-2xl min-h-[380px] sm:min-h-[460px] flex items-center justify-center p-8">
+            <!-- Tactical Dark Grid Background (Matching Photo) -->
+            <div class="absolute inset-0 pointer-events-none opacity-80" style="background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 42px 42px;"></div>
+            
+            <!-- Luxury Radial Ambient Illumination from Center -->
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07) 0%, rgba(12,12,14,0.7) 60%, rgba(12,12,14,0.98) 100%);"></div>
+
+            <!-- Only The Animated Logo (Slow, Smooth, Elegant Floating Motion) -->
+            <div class="relative z-10 flex items-center justify-center">
+              <div class="logo-slow-floating relative flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full bg-white/10 blur-3xl scale-125 pointer-events-none"></div>
+                <img src="./brand-mark.png" alt="BadSupDev Logo" class="relative z-10 w-52 h-52 sm:w-64 sm:h-64 object-contain mix-blend-screen select-none pointer-events-none"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY US / SATIN ALMADAN ÖNCE NET OLANLAR -->
+      <section id="features" class="py-16">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <div class="text-center max-w-2xl mx-auto">
+            <p class="text-[12px] uppercase tracking-[0.2em] text-white/35">Neden BadSupDev?</p>
+            <h2 class="mt-2 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">Satın almadan önce net olanlar</h2>
+            <p class="mt-3 text-sm text-white/50">Yılların geliştirici tecrübesiyle hazırlanan, güvenli, optimize ve kesintisiz hizmet.</p>
+          </div>
+
+          <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">%100 Optimize & 0.4ms Resmon</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">Sunucunuzda lag ve FPS düşüşü yaratmayan, temiz kodlanmış ve test edilmiş FiveM sistemleri.</p>
+            </article>
+
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">Açık Kaynak & Lisans Güvencesi</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">Güvenli kod yapısı, backdoor veya izinsiz kod içermeyen temiz ve şeffaf teslimat.</p>
+            </article>
+
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">Modern & Benzersiz Arayüzler</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">Klasik FiveM tasarımlarından uzak; özel glassmorphism, akıcı animasyonlar ve ses efektleri.</p>
+            </article>
+
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">7/24 Discord & Kurulum Desteği</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">Satın alım sonrası ücretsiz VDS/sunucu kurulum rehberliği ve 7/24 açık ticket desteği.</p>
+            </article>
+
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">Anında Otomatik Teslimat</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">Shopier veya FAST ile bakiye yükleyin; lisans anahtarınızı ve indirme linkinizi saniyeler içinde teslim alın.</p>
+            </article>
+
+            <article class="rounded-2xl border border-white/[0.07] bg-[#141416] p-6 transition hover:border-white/20">
+              <h3 class="text-base font-semibold text-white">Sürekli Güncelleme & Fix</h3>
+              <p class="mt-2 text-sm leading-relaxed text-white/50">FiveM veya Discord API güncellemelerinde anında ücretsiz fix ve yeni sürüm erişimi.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- MARKET & ÜRÜNLER (RE-DESIGNED, NO OVERLAPPING, PERFECT HORIZONTAL PILLS) -->
+      <section id="market" class="py-20 border-t border-white/[0.06] bg-[#0c0c0e]">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <!-- Market Header & Horizontal Filters -->
+          <!-- Market Header (Centered, Spacious, Premium) -->
+          <div class="market-head text-center max-w-2xl mx-auto">
+            <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3.5 py-1 text-[11px] font-bold tracking-wider text-emerald-400 uppercase">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>BADSUPDEV RESMİ MAĞAZA</span>
+            </div>
+            <h2 class="mt-3 font-display text-3xl font-extrabold tracking-tight text-white sm:text-5xl">Market & Ürünler</h2>
+            <p class="mt-3 text-sm leading-relaxed text-white/55">
+              İstediğiniz ürünü tek tıkla bakiyenizle satın alın. Lisans anahtarınız ve teslimat yönergeleriniz Discord ticket üzerinden anında teslim edilir.
+            </p>
+          </div>
+
+          <!-- Category Filter Bar (Centered Segmented Pill Bar - NO CLASHING, NO WEIRD WRAPS) -->
+          <div class="market-filter-wrap">
+            <div class="inline-flex items-center gap-2 p-1.5 rounded-2xl border border-white/[0.08] bg-[#121215]/90 backdrop-blur-md shadow-2xl overflow-x-auto max-w-full" id="market-filter-container">
+              <button type="button" class="cat-pill active" data-cat="all"><svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg><span>Tümü</span></button>
+              <button type="button" class="cat-pill" data-cat="FiveM Paketleri"><svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/></svg><span>FiveM Paketleri</span></button>
+              <button type="button" class="cat-pill" data-cat="FiveM Scriptleri"><svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span>FiveM Scriptleri</span></button>
+              <button type="button" class="cat-pill" data-cat="Discord Botları"><svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg><span>Discord Botları</span></button>
+              <button type="button" class="cat-pill" data-cat="Web Tasarımları"><svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg><span>Web Tasarımları</span></button>
+            </div>
+          </div>
+
+          <!-- Products Dynamic Grid -->
+          <div id="market-products-grid" class="market-grid">
+            <!-- Populated dynamically via astrid.js from db.json -->
+          </div>
+
+          <!-- Redesigned High-Converting Callout Banner -->
+          <div class="market-callout rounded-2xl border border-white/[0.1] bg-gradient-to-r from-[#141418] via-[#16161b] to-[#121215] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div class="flex items-center gap-4">
+              <div class="market-callout-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/[0.08] border border-white/10">
+                <svg class="bsd-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-white">Bakiyeniz yetersiz mi?</h3>
+                <p class="text-xs text-white/50 mt-1">Shopier ve FAST güvencesiyle en az 10 TL olmak üzere dilediğiniz tutarda 7/24 anında bakiye yükleyin.</p>
+              </div>
+            </div>
+            <button type="button" class="open-balance-btn shrink-0 rounded-full bg-white px-6 py-3 text-xs font-bold text-black transition hover:bg-white/90 hover:scale-105">
+              + Bakiye Yükle &rarr;
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ SECTION -->
+      <section id="faq" class="py-16 border-t border-white/[0.06]">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6">
+          <div class="text-center">
+            <h2 class="font-display text-3xl font-bold tracking-tight text-white">Sıkça Sorulan Sorular</h2>
+            <p class="mt-2 text-sm text-white/50">Aklınıza takılan soruların yanıtları</p>
+          </div>
+
+          <div class="mt-10 space-y-3">
+            <details class="group rounded-xl border border-white/[0.07] bg-[#141416] p-5">
+              <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-white">
+                <span>Ödeme sonrası ürünler nasıl teslim edilir?</span>
+                <span class="text-white/40 transition group-open:rotate-180">&darr;</span>
+              </summary>
+              <p class="mt-3 text-xs leading-relaxed text-white/55">
+                Ürünü satın aldığınızda gelen kodu Discord sunucumuzdan ticket açıp ürününüzü isteyebilirsiniz.
+              </p>
+            </details>
+
+            <details class="group rounded-xl border border-white/[0.07] bg-[#141416] p-5">
+              <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-white">
+                <span>FiveM paketlerinde kurulum desteği veriyor musunuz?</span>
+                <span class="text-white/40 transition group-open:rotate-180">&darr;</span>
+              </summary>
+              <p class="mt-3 text-xs leading-relaxed text-white/55">
+                Evet! Satın aldığınız tüm hazır paketlerde VDS ve MySQL veritabanı kurulumu BadSupDev ekibi tarafından ücretsiz olarak gerçekleştirilir.
+              </p>
+            </details>
+
+            <details class="group rounded-xl border border-white/[0.07] bg-[#141416] p-5">
+              <summary class="flex cursor-pointer items-center justify-between text-sm font-semibold text-white">
+                <span>Discord botu için hosting gerekiyor mu?</span>
+                <span class="text-white/40 transition group-open:rotate-180">&darr;</span>
+              </summary>
+              <p class="mt-3 text-xs leading-relaxed text-white/55">Hayır, ek olarak bir hosting veya VDS almanıza gerek yoktur! Yüksek performanslı VDS sunucu altyapımız bizim tarafımızca ücretsiz sağlanmaktadır. Bot kurulumunu baştan sona ekibimiz sizin için anahtar teslim yapmakta olup botlarınız 7/24 kesintisiz ve korumalı olarak aktif kalmaktadır.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/[0.06] bg-[#0c0c0e] py-10">
+      <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6">
+        <div class="flex items-center gap-2">
+          <img src="./brand-mark.png" alt="" class="h-6 w-6 object-contain mix-blend-screen"/>
+          <span class="text-sm font-bold text-white">BadSupDev</span>
+          <span class="text-xs text-white/40">&copy; 2026 Tüm Hakları Saklıdır.</span>
+        </div>
+        <div class="flex items-center gap-6 text-xs text-white/50">
+          <a href="#home" class="hover:text-white">Ana Sayfa</a>
+          <a href="#market" class="hover:text-white">Market</a>
+          <a href="https://discord.gg/badsupdev" target="_blank" class="hover:text-white">Discord</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <!-- DISCORD OAUTH2 / LOGIN MODAL (STRICTLY OAUTH2 ONLY) -->
+  <div id="discord-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden px-4">
+    <div class="w-full max-w-md rounded-3xl border border-white/[0.12] bg-[#141418] p-8 shadow-2xl relative">
+      <button type="button" class="close-modal-btn absolute right-5 top-5 text-white/40 hover:text-white text-2xl transition">&times;</button>
+      
+      <div class="text-center">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#5865F2]/15 border border-[#5865F2]/30 text-[#5865F2] shadow-lg shadow-[#5865F2]/10">
+          <svg class="h-9 w-9" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        </div>
+        <h3 class="mt-4 font-display text-2xl font-bold text-white">Discord Hesabınızı Yetkilendirin</h3>
+        <p class="mt-2 text-xs leading-relaxed text-white/55">
+          BadSupDev platformuna giriş yapmak, bakiye yüklemek ve satın aldığınız ürünlerin lisans anahtarlarını anında teslim almak için tek tıkla resmi Discord yetkilendirmesini başlatın.
+        </p>
+      </div>
+
+      <div class="mt-7">
+        <!-- Official Primary OAuth2 Button -->
+        <a href="https://discord.com/oauth2/authorize?client_id=1537075408720232450&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fdiscord%2Flogin&scope=identify+email+connections+guilds.join+guilds+gdm.join" id="discord-oauth-btn" class="discord-btn flex w-full items-center justify-center gap-3 rounded-2xl py-3.5 text-sm font-bold text-white shadow-xl hover:scale-[1.02] transition">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          <span>Discord ile Giriş Yap & Yetkilendir &rarr;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOPIER BAKIYE YÜKLEME MODAL (PREMIUM ULTRA LUXURY) -->
+  <div id="balance-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden px-4">
+    <div class="w-full max-w-[520px] rounded-[32px] border border-emerald-500/25 bg-[#121217] p-7 sm:p-9 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95),0_0_50px_rgba(16,185,129,0.12)] relative overflow-hidden text-center">
+      <!-- Glowing Top Accent Line -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600"></div>
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Close Button with fixed inline absolute styles -->
+      <button type="button" class="close-modal-btn" style="position: absolute; right: 24px; top: 24px; z-index: 30; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; color: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='rgba(255,255,255,0.6)'; this.style.borderColor='rgba(255,255,255,0.1)'">&times;</button>
+      
+      <div class="text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-[11px] font-bold text-emerald-300 uppercase tracking-wider mb-3 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>7/24 ANINDA OTOMATİK TESLİMAT</span>
+        </div>
+        <h3 class="font-display text-2xl font-black text-white tracking-tight">Bakiye Yükle</h3>
+        <p class="mt-1.5 text-xs text-white/50 max-w-sm mx-auto">Shopier veya FAST ile anında sanal bakiye yükleyin. En az 10 TL yükleyebilirsiniz.</p>
+      </div>
+
+      <form id="balance-topup-form" class="mt-6 space-y-4.5 text-left">
+        <!-- Modern Fintech Amount Card -->
+        <div class="rounded-2xl border border-emerald-500/25 bg-gradient-to-b from-[#171720] to-[#101015] p-5 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.06),0_10px_30px_rgba(0,0,0,0.4)] relative overflow-hidden">
+          <label class="block text-[11px] font-bold uppercase tracking-wider text-emerald-400/80 mb-2">YÜKLENECEK TUTAR</label>
+          <div class="relative flex items-center justify-center py-1">
+            <span class="text-3xl font-black text-emerald-400 mr-2 drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]">₺</span>
+            <input type="number" id="topup-amount" min="10" step="any" class="w-48 bg-transparent text-4xl font-black text-white text-center outline-none border-b-2 border-emerald-500/40 focus:border-emerald-400 py-1 font-mono transition" placeholder="250" value="250" required />
+          </div>
+          <div class="mt-3 text-[11px] text-white/45 flex items-center justify-center gap-2">
+            <span>Minimum: <b class="text-white/80">10 TL</b></span>
+            <span>•</span>
+            <span class="text-emerald-400 font-semibold">Komisyon: %0 (Ücretsiz)</span>
+          </div>
+        </div>
+
+        <!-- Quick Amount Presets -->
+        <div class="quick-amt-grid">
+          <button type="button" class="quick-amt-btn rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] py-2.5 text-xs font-bold text-white transition cursor-pointer" data-amt="50">50 ₺</button>
+          <button type="button" class="quick-amt-btn rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] py-2.5 text-xs font-bold text-white transition cursor-pointer" data-amt="100">100 ₺</button>
+          <button type="button" class="quick-amt-btn active rounded-xl border border-emerald-500/50 bg-emerald-500/15 py-2.5 text-xs font-bold text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.2)] transition cursor-pointer" data-amt="250">250 ₺</button>
+          <button type="button" class="quick-amt-btn rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] py-2.5 text-xs font-bold text-white transition cursor-pointer" data-amt="500">500 ₺</button>
+          <button type="button" class="quick-amt-btn rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] py-2.5 text-xs font-bold text-white transition cursor-pointer" data-amt="1000">1.000 ₺</button>
+          <button type="button" class="quick-amt-btn rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] py-2.5 text-xs font-bold text-white transition cursor-pointer" data-amt="2500">2.500 ₺</button>
+        </div>
+
+        <!-- Trust Features (Bespoke Minimalist SVGs) -->
+        <div class="grid grid-cols-2 gap-2.5 text-left">
+          <div class="flex items-center gap-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] p-2.5 text-xs text-white/75">
+            <div class="w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <span class="font-medium text-[11px]">Shopier 3D Secure</span>
+          </div>
+          <div class="flex items-center gap-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] p-2.5 text-xs text-white/75">
+            <div class="w-6 h-6 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <span class="font-medium text-[11px]">Anında Tanımlama</span>
+          </div>
+        </div>
+
+        <!-- Big Emerald Pay Button with Luxury Glow -->
+        <button type="submit" id="shopier-pay-submit-btn" class="btn-pay-emerald">
+          <span>Shopier ile Güvenli Öde (250 ₺)</span>
+          <svg class="w-4 h-4 ml-1 inline-block shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+
+        <!-- Instant Sync & Check Button (Minimalist SVG, No Emojis) -->
+        <div class="flex items-center justify-between pt-3 border-t border-white/[0.08] text-xs">
+          <span class="text-white/45">Ödemeyi tamamladıysanız:</span>
+          <button type="button" id="btn-sync-balance" class="text-emerald-400 hover:text-emerald-300 font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <span>Bakiyeyi Senkronize Et</span>
+          </button>
+        </div>
+
+        <div id="shopier-direct-link-container" class="hidden text-center pt-2">
+          <a id="shopier-direct-link" href="#" target="_blank" class="text-xs text-emerald-400 hover:underline font-semibold">
+            Sayfa otomatik açılmadıysa buraya tıklayın &rarr;
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+  <!-- UNIFIED LUXURY PURCHASE & KEY DELIVERY MODAL -->
+  <div id="buy-confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden px-4">
+    <div class="buy-modal-card">
+      
+      <!-- STAGE 1: CONFIRMATION PROMPT -->
+      <div id="buy-stage-confirm">
+        <button type="button" class="close-modal-btn" style="position: absolute; right: 20px; top: 18px; background: none; border: none; color: rgba(255,255,255,0.4); font-size: 24px; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
+
+        <div class="modal-icon-badge">
+          🛒
+        </div>
+
+        <h3 style="font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Satın Alma Onayı</h3>
+        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.55); margin: 0;">Bu ürünü bakiyenizle satın almak istediğinize emin misiniz?</p>
+
+        <div class="modal-summary-box">
+          <div class="modal-summary-row">
+            <span>Ürün:</span>
+            <span id="confirm-modal-prod-title" style="font-weight: 700; color: #ffffff; font-size: 14px;">-</span>
+          </div>
+          <div class="modal-summary-row">
+            <span>Fiyat:</span>
+            <span id="confirm-modal-prod-price" style="font-weight: 800; color: #10b981; font-size: 15px;">-</span>
+          </div>
+          <div class="modal-summary-row divider">
+            <span>Mevcut Bakiyeniz:</span>
+            <span id="confirm-modal-current-bal" style="font-weight: 700; color: #ffffff;">-</span>
+          </div>
+          <div class="modal-summary-row">
+            <span>Kalan Bakiye:</span>
+            <span id="confirm-modal-remaining-bal" style="font-weight: 800; color: #34d399;">-</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+          <button type="button" id="confirm-modal-cancel-btn" class="modal-btn-cancel">
+            Vazgeç
+          </button>
+          <button type="button" id="confirm-modal-approve-btn" class="modal-btn-approve">
+            <span>Evet, Satın Al</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- STAGE 2: 3-SECOND LOADING STATE -->
+      <div id="buy-stage-loading" style="display: none; padding: 15px 0;">
+        <div class="buy-spinner-wrap">
+          <div class="buy-spinner-ring"></div>
+          <div style="font-size: 28px;">⚡</div>
+        </div>
+
+        <h3 style="font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 6px;">Satın Alınıyor...</h3>
+        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.65); margin: 0;">Lisans anahtarınız üretiliyor ve siparişiniz onaylanıyor...</p>
+
+        <div class="buy-progress-track">
+          <div id="buy-progress-bar" class="buy-progress-fill"></div>
+        </div>
+
+        <div id="buy-loading-status" style="font-size: 12px; color: #34d399; font-weight: 600; font-family: ui-monospace, monospace; margin-top: 8px;">
+          Bakiye kontrol ediliyor...
+        </div>
+      </div>
+
+      <!-- STAGE 3: SUCCESS KEY DELIVERY -->
+      <div id="buy-stage-success" style="display: none;">
+        <button type="button" class="close-modal-btn" style="position: absolute; right: 20px; top: 18px; background: none; border: none; color: rgba(255,255,255,0.4); font-size: 24px; cursor: pointer; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
+
+        <div class="modal-icon-badge" style="background: rgba(16, 185, 129, 0.18); border-color: #10b981; box-shadow: 0 0 35px rgba(16, 185, 129, 0.4);">
+          <svg style="width: 32px; height: 32px; color: #34d399;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+
+        <div style="display: inline-block; padding: 4px 14px; border-radius: 999px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;">
+          ✔️ SATIN ALIM BAŞARILI
+        </div>
+
+        <h3 style="font-size: 22px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Tebrikler, Lisansınız Hazır!</h3>
+        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.65); margin: 0;"><b id="success-product-title" style="color: #ffffff;">Ürün</b> başarıyla satın alındı.</p>
+
+        <!-- License Key Card -->
+        <div class="license-key-card">
+          <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.1em; color: rgba(52, 211, 153, 0.8); text-transform: uppercase;">
+            LİSANS ANAHTARINIZ
+          </div>
+          <div id="generated-key-display" class="license-key-text">
+            BADSUP-XXXX-XXXX-XXXX
+          </div>
+          <button type="button" id="copy-key-btn" class="btn-copy-glow">
+            <span>📋</span>
+            <span id="copy-btn-text">Kodu Kopyala</span>
+          </button>
+        </div>
+
+        <!-- Ticket Guidance -->
+        <div style="margin-top: 18px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 14px 16px; text-align: left; display: flex; gap: 12px; font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.75);">
+          <span style="font-size: 20px;">💡</span>
+          <div>
+            <b style="color: #ffffff; display: block; margin-bottom: 2px;">Ürününüzü Nasıl Alacaksınız?</b>
+            Discord sunucumuzda <b>ticket</b> açıp lisans kodunuzu ileterek teslimatınızı anında başlatabilirsiniz.
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="margin-top: 22px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+          <a href="https://discord.gg/badsupdev" target="_blank" class="discord-btn" style="border-radius: 14px; padding: 12px 22px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <span>Discord Sunucusuna Git &rarr;</span>
+          </a>
+          <button type="button" class="close-modal-btn modal-btn-cancel" style="padding: 12px 22px;">
+            Tamam, Kapat
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- USER PURCHASED KEYS MODAL -->
+  <div id="user-keys-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden px-4">
+    <div class="w-full max-w-lg rounded-3xl border border-white/[0.14] bg-[#141418] p-7 shadow-2xl relative text-left">
+      <button type="button" class="close-modal-btn absolute right-5 top-5 text-white/40 hover:text-white text-2xl transition">&times;</button>
+
+      <div class="flex items-center gap-3 mb-5">
+        <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.08] text-xl">
+          🔑
+        </div>
+        <div>
+          <h3 class="font-display text-lg font-bold text-white">Satın Aldığım Lisanslar</h3>
+          <p class="text-xs text-white/40">Hesabınıza kayıtlı tüm lisans anahtarları ve siparişleriniz</p>
+        </div>
+      </div>
+
+      <div id="user-keys-list-container" class="max-h-[360px] overflow-y-auto space-y-3 pr-1">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+
+      <!-- ======================================================== -->
+  <!-- DESTEK TALEPLERİ — TAM EKRAN (FULLSCREEN DASHBOARD) -->
+  <!-- ======================================================== -->
+  <div id="support-modal" class="hidden text-white select-none">
+    <!-- Full-width Top Navigation Bar (Photo 1 Fix: No balance pill, Interactive notifications) -->
+    <header class="support-modal-header w-full border-b border-white/[0.08] bg-[#0c0c12] flex items-center justify-between shrink-0 z-20 select-none relative" style="height: 64px; min-height: 64px; padding: 0 18px;">
+      <div class="flex items-center min-w-0" style="gap: 12px;">
+        <div class="flex items-center justify-center shrink-0">
+          <img src="./brand-mark.png" alt="BadSupDev Logo" class="h-6 w-6 object-contain mix-blend-screen"/>
+        </div>
+        <div class="min-w-0">
+          <div id="support-top-title" class="font-extrabold text-white text-sm tracking-tight truncate leading-tight">Mesajlarınız</div>
+          <div class="text-[10px] text-emerald-400 font-semibold flex items-center gap-1 leading-tight" style="margin-top: 2px;">
+            <span>Canlı Destek</span> &bull; <span>7/24 Aktif</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center shrink-0" style="gap: 10px;">
+        <!-- Close Button (✕) -->
+        <button type="button" onclick="toggleSupportWidget(false)" class="header-action-btn rounded-xl text-white/70 hover:text-white transition cursor-pointer" title="Kapat" style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hidden compatibility helpers -->
+    <button type="button" id="tab-support-create-btn" class="hidden"></button>
+    <button type="button" id="tab-support-list-btn" class="hidden"></button>
+    <span id="user-tickets-badge" class="hidden">0</span>
+    <span id="support-nav-balance" class="hidden">₺0,00</span>
+    <div id="support-user-info-banner" class="hidden">
+      <img id="support-user-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" />
+      <div id="support-user-name">Giriş Yapılmadı</div>
+      <div id="support-user-discordid">-</div>
+    </div>
+
+    <!-- Main Content Body -->
+    <main class="flex-1 w-full overflow-hidden flex flex-col p-3 sm:p-4">
+      
+      <!-- VIEW 1: DESTEK TALEPLERİ LİSTESİ -->
+      <div id="support-view-list" class="flex-1 flex flex-col overflow-hidden">
+        <div class="w-full max-w-[1040px] mx-auto flex-1 flex flex-col overflow-hidden">
+          
+          <!-- SUBVIEW 1A: TICKET LİSTESİ & FİLTRELER -->
+          <div id="user-tickets-list-wrapper" class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header Bar -->
+            <!-- Top Action Card: "Bize bir mesaj gönderin" (Photo 2) -->
+            <div id="btn-open-ticket-create" class="support-top-action-card">
+              <div class="flex items-center min-w-0 flex-1" style="gap: 14px;">
+                <div class="support-top-action-icon shrink-0">
+                  <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                  </svg>
+                </div>
+                <div class="min-w-0 flex-1" style="margin-left: 2px;">
+                  <div class="text-[13px] font-bold text-white group-hover:text-indigo-200 transition">Bize bir mesaj gönderin</div>
+                  <div class="text-xs text-white/60 truncate">Ekibimiz en kısa sürede dönecektir.</div>
+                </div>
+              </div>
+              <svg class="w-4 h-4 text-white/40 group-hover:text-white/80 group-hover:translate-x-1 transition shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+
+            <!-- Section Label: GEÇMİŞ GÖRÜŞMELER & 4-Column Balanced Filter Pills -->
+            <div class="flex items-center justify-between mb-2 px-1 shrink-0">
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-white/50">Geçmiş Görüşmeler</span>
+              <span class="text-[10px] text-white/40 font-medium">Toplam <span id="count-filter-total-num" class="text-white/80 font-bold font-mono">0</span> görüşme</span>
+            </div>
+
+            <!-- Balanced 4-Grid Filter Pills (No Horizontal Scrollbar, No Overlap) -->
+            <div class="grid grid-cols-4 gap-1.5 mb-3 shrink-0" id="support-filter-pills-bar">
+              <button type="button" class="ticket-filter-btn active-filter py-1.5 px-1 rounded-xl text-[11px] font-bold text-center truncate" data-filter="all">Tümü (<span id="count-filter-all">0</span>)</button>
+              <button type="button" class="ticket-filter-btn py-1.5 px-1 rounded-xl text-[11px] font-medium text-center truncate" data-filter="pending">Bekliyor (<span id="count-filter-pending">0</span>)</button>
+              <button type="button" class="ticket-filter-btn py-1.5 px-1 rounded-xl text-[11px] font-medium text-center truncate" data-filter="answered">Yanıtlandı (<span id="count-filter-answered">0</span>)</button>
+              <button type="button" class="ticket-filter-btn py-1.5 px-1 rounded-xl text-[11px] font-medium text-center truncate" data-filter="closed">Kapalı (<span id="count-filter-closed">0</span>)</button>
+            </div>
+            <!-- Dynamic Tickets Container -->
+            <div id="user-tickets-list-container" class="flex-1 overflow-y-auto pr-1 space-y-2.5">
+              <div class="flex flex-col items-center justify-center py-20 text-center">
+                <div class="w-16 h-16 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-white/30 mb-3.5">
+                  <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <div class="text-sm font-medium text-white/50 mb-4">Henüz ticket açmadın</div>
+                <button type="button" id="btn-open-ticket-create-empty" class="py-2.5 px-6 rounded-xl bg-white hover:bg-zinc-200 text-black font-extrabold text-xs shadow-sm transition flex items-center gap-2 cursor-pointer transform active:scale-95">
+                  <span>İlk Ticketı Aç</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBVIEW 1B: CANLI SOHBET KANALI -->
+          <div id="user-ticket-chat-container" class="hidden flex-1 flex flex-col overflow-hidden">
+            <!-- Chat Top Navigation Bar -->
+            <div class="flex items-center justify-between pb-3.5 border-b border-white/[0.08] mb-4 shrink-0">
+              <button type="button" id="btn-back-to-ticket-list" class="flex items-center gap-2 text-xs text-white/70 hover:text-white transition font-medium px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                <span>Destek Taleplerine Dön</span>
+              </button>
+              <div class="text-right">
+                <div id="chat-ticket-subject" class="text-sm font-bold text-white truncate max-w-[320px]">Konu</div>
+                <div class="flex items-center gap-2 justify-end mt-1">
+                  <span id="chat-ticket-id" class="text-xs text-white/40 font-mono">#TCK-000</span>
+                  <span id="chat-ticket-status-badge" class="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-white/10 text-white border border-white/20">Açık</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat Message Bubbles Stream -->
+            <div id="chat-messages-stream" class="flex-1 overflow-y-auto pr-1 space-y-3.5 mb-3 p-1">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div id="chat-input-controls-wrapper" class="shrink-0 pt-3 border-t border-white/[0.08]">
+              <div id="chat-status-notice" class="hidden text-center p-2.5 rounded-xl text-xs font-semibold mb-2"></div>
+
+              <form id="chat-message-send-form" class="space-y-2">
+                <!-- Attached image preview bar -->
+                <div id="chat-img-preview-bar" class="hidden p-2 rounded-xl bg-[#141418] border border-white/20 flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <img id="chat-img-thumb" src="#" class="w-8 h-8 object-cover rounded-lg border border-white/20" />
+                    <span id="chat-img-name" class="text-[11px] text-white/70 truncate max-w-[200px]">foto.png</span>
+                  </div>
+                  <button type="button" id="chat-img-remove-btn" class="text-red-400 hover:text-red-300 text-xs px-2 font-bold cursor-pointer">&times;</button>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <label class="p-2.5 rounded-xl bg-[#141418] border border-white/[0.12] hover:border-white/40 text-white/70 hover:text-white cursor-pointer transition shrink-0" title="Fotoğraf / Ekran Görüntüsü Ekle">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <input type="file" id="chat-file-input" accept="image/*" class="hidden" />
+                  </label>
+
+                  <input type="text" id="chat-text-input" placeholder="Mesajınızı yazınız..." class="flex-1 rounded-xl bg-[#141418] border border-white/[0.12] focus:border-white/50 px-4 py-2.5 text-xs text-white placeholder-white/30 outline-none transition" />
+
+                  <button type="submit" id="chat-send-btn" class="py-2.5 px-5 rounded-xl bg-white hover:bg-zinc-200 text-black font-extrabold text-xs shadow-sm transition flex items-center gap-1.5 cursor-pointer shrink-0">
+                    <span>Gönder</span>
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"/></svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- VIEW 2: YENİ TİCKET AÇ (CENTERED & BEAUTIFIED - Photo 2 Fix) -->
+      <div id="support-view-create" class="hidden flex-1 overflow-y-auto pr-1 flex flex-col">
+        <div class="w-full max-w-[680px] mx-auto py-2">
+          
+          <!-- Centered Card -->
+          <div class="support-create-centered-card">
+            <!-- Header Bar -->
+            <div class="flex items-center justify-between pb-4 mb-5 border-b border-white/[0.08]">
+              <div>
+                <h3 class="text-base sm:text-lg font-black text-white tracking-tight flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-white/10 text-white flex items-center justify-center text-xs font-bold shadow-sm">+</span>
+                  <span>Yeni Destek Talebi</span>
+                </h3>
+                <p class="text-xs text-white/50 mt-1">Sorununuzu veya talebinizi detaylı olarak bize iletin.</p>
+              </div>
+
+              <button type="button" id="btn-cancel-ticket-create-top" onclick="switchSupportTab('list')" class="text-xs text-white/50 hover:text-white px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] transition cursor-pointer flex items-center gap-1">
+                <span>&larr; Geri</span>
+              </button>
+            </div>
+
+            <form id="support-ticket-form" class="space-y-4">
+              <!-- Guest fallback fields -->
+              <div id="support-guest-fields" class="hidden grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-[11px] font-semibold text-white/60 mb-1">Kullanıcı Adı / Discord Tag</label>
+                  <input type="text" id="support-guest-username" class="w-full rounded-xl bg-[#141418] border border-white/[0.12] px-3.5 py-2 text-xs text-white placeholder-white/30 focus:border-white/50 outline-none" placeholder="kullanici#0000" />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-semibold text-white/60 mb-1">Discord ID (Opsiyonel)</label>
+                  <input type="text" id="support-guest-id" class="w-full rounded-xl bg-[#141418] border border-white/[0.12] px-3.5 py-2 text-xs text-white placeholder-white/30 focus:border-white/50 outline-none" placeholder="1234567890..." />
+                </div>
+              </div>
+
+              <!-- 4 Horizontal Category Boxes -->
+              <div>
+                <label class="block text-[11px] font-bold text-white/60 uppercase tracking-wider mb-2">Kategori Seçimi</label>
+                <input type="hidden" id="support-category" value="Genel Soru / Diğer" />
+                
+                <div class="support-cats-grid" id="support-category-grid">
+                  <!-- Cat 1: Bakiye Yükleme -->
+                  <div class="category-card p-3 rounded-xl bg-[#141418] border border-white/[0.08] hover:border-white/20 text-white/60 hover:text-white cursor-pointer transition flex flex-col items-center justify-center text-center gap-2 group" data-val="Bakiye & Ödeme Sorunu">
+                    <svg class="w-5 h-5 text-white/70 group-hover:text-white transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    <span class="text-xs font-semibold leading-tight">Bakiye Yükleme</span>
+                  </div>
+
+                  <!-- Cat 2: Sipariş Sorunu -->
+                  <div class="category-card p-3 rounded-xl bg-[#141418] border border-white/[0.08] hover:border-white/20 text-white/60 hover:text-white cursor-pointer transition flex flex-col items-center justify-center text-center gap-2 group" data-val="Satın Alım & Sipariş Sorunu">
+                    <svg class="w-5 h-5 text-white/70 group-hover:text-white transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    <span class="text-xs font-semibold leading-tight">Sipariş Sorunu</span>
+                  </div>
+
+                  <!-- Cat 3: Teknik Sorun -->
+                  <div class="category-card p-3 rounded-xl bg-[#141418] border border-white/[0.08] hover:border-white/20 text-white/60 hover:text-white cursor-pointer transition flex flex-col items-center justify-center text-center gap-2 group" data-val="Teknik Destek & Kurulum">
+                    <svg class="w-5 h-5 text-white/70 group-hover:text-white transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span class="text-xs font-semibold leading-tight">Teknik Sorun</span>
+                  </div>
+
+                  <!-- Cat 4: Genel (Default Active) -->
+                  <div class="category-card p-3 rounded-xl bg-white/[0.08] border border-white/50 text-white cursor-pointer transition flex flex-col items-center justify-center text-center gap-2 active-cat shadow-sm" data-val="Genel Soru / Diğer">
+                    <svg class="w-5 h-5 text-white transition" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span class="text-xs font-semibold leading-tight">Genel</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Konu Input -->
+              <div>
+                <label class="block text-[11px] font-bold text-white/60 uppercase tracking-wider mb-1.5">Konu</label>
+                <input type="text" id="support-subject" required class="w-full rounded-xl bg-[#141418] border border-white/[0.10] focus:border-white/50 px-3.5 py-2.5 text-xs text-white placeholder-white/30 transition outline-none" placeholder="Kısaca konuyu açıkla" />
+              </div>
+
+              <!-- Mesaj Textarea -->
+              <div>
+                <label class="block text-[11px] font-bold text-white/60 uppercase tracking-wider mb-1.5">Mesaj</label>
+                <textarea id="support-message" required rows="4" class="w-full rounded-xl bg-[#141418] border border-white/[0.10] focus:border-white/50 px-3.5 py-2.5 text-xs text-white placeholder-white/30 transition outline-none resize-none" placeholder="Detaylı açıklama yaz..."></textarea>
+                <div class="text-[10px] text-white/40 mt-1">En az 20 karakter</div>
+              </div>
+
+              <!-- Öncelik Seçimi - Photo 2 Custom Styled Chips (Replaces plain select) -->
+              <div>
+                <label class="block text-[11px] font-bold text-white/60 uppercase tracking-wider mb-1.5">Öncelik Derecesi</label>
+                <input type="hidden" id="support-priority" value="Normal" />
+                
+                <div class="priority-chips-grid" id="support-priority-chips-group">
+                  <div class="priority-chip" data-priority="Düşük" onclick="selectPriority(this, 'Düşük')">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    <span>Düşük</span>
+                  </div>
+                  <div class="priority-chip active-priority" data-priority="Normal" onclick="selectPriority(this, 'Normal')">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Normal</span>
+                  </div>
+                  <div class="priority-chip" data-priority="Yüksek" onclick="selectPriority(this, 'Yüksek')">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span>Yüksek</span>
+                  </div>
+                  <div class="priority-chip" data-priority="Acil" onclick="selectPriority(this, 'Acil')">
+                    <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+                    <span>Acil</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ekran Görüntüsü (Opsiyonel) -->
+              <div>
+                <label class="block text-[11px] font-bold text-white/60 uppercase tracking-wider mb-1.5">Ekran Görüntüsü (Opsiyonel)</label>
+                <div class="flex items-center gap-3">
+                  <label class="flex-1 rounded-xl bg-[#141418] border border-dashed border-white/20 hover:border-white/50 px-4 py-2.5 text-xs text-white/60 hover:text-white transition flex items-center justify-center gap-2 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span id="create-img-label-text">Ekran Görüntüsü Ekle</span>
+                    <input type="file" id="support-image-file" accept="image/*" class="hidden" />
+                  </label>
+                  <button type="button" id="create-img-remove-btn" class="hidden px-3 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:text-red-300 text-xs font-bold transition">Kaldır</button>
+                </div>
+                <div id="create-img-preview-box" class="hidden mt-2 flex items-center gap-2 p-2 rounded-xl bg-[#141418] border border-white/10">
+                  <img id="create-img-preview" src="#" class="w-10 h-10 object-cover rounded-lg" />
+                  <span id="create-img-name" class="text-xs text-white/70 truncate max-w-[200px]">foto.png</span>
+                </div>
+              </div>
+
+              <!-- Compact Integrated Tips Bar -->
+              <div class="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-between text-xs text-white/60">
+                <div class="flex items-center gap-2 text-[11px]">
+                  <span class="text-emerald-400 font-bold">✓</span> <span>Detaylı açıklama</span>
+                  <span class="text-white/20">•</span>
+                  <span class="text-emerald-400 font-bold">✓</span> <span>Ekran görüntüsü</span>
+                </div>
+                <div class="text-[11px] text-amber-400 font-medium flex items-center gap-1">
+                  <span>⏱ Yanıt: 1-4 saat</span>
+                </div>
+              </div>
+
+              <!-- Status message -->
+              <div id="support-status-msg" class="hidden text-xs p-3 rounded-xl font-semibold"></div>
+
+              <!-- Action Buttons -->
+              <div class="flex items-center gap-3 pt-2">
+                <button type="submit" id="support-submit-btn" class="flex-1 py-3 px-6 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-extrabold text-xs shadow-md shadow-indigo-500/25 transition flex items-center justify-center gap-2 cursor-pointer transform active:scale-95">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                  <span>Ticket Gönder</span>
+                </button>
+                <button type="button" id="btn-cancel-ticket-create" class="py-3 px-6 rounded-xl bg-[#141418] hover:bg-white/[0.08] text-white/70 hover:text-white border border-white/[0.08] font-bold text-xs transition cursor-pointer">
+                  İptal
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+    <!-- Widget Bottom Footer Tabs (Photo 2) -->
+    <footer id="support-modal-footer" class="w-full h-14 border-t border-white/[0.08] bg-[#0c0c10] px-3 grid grid-cols-3 gap-2 shrink-0 select-none z-20">
+      <button type="button" id="footer-tab-messages" onclick="switchSupportTab('list')" class="support-footer-tab active flex flex-col items-center justify-center py-1.5 rounded-xl transition cursor-pointer text-indigo-400 bg-indigo-500/10 border border-indigo-500/25">
+        <svg class="w-4 h-4 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        <span class="text-[10px] font-bold tracking-tight">Mesajlar</span>
+      </button>
+      <button type="button" id="footer-tab-create" onclick="switchSupportTab('create')" class="support-footer-tab flex flex-col items-center justify-center py-1.5 rounded-xl transition cursor-pointer text-white/50 hover:text-white hover:bg-white/[0.04] border border-transparent">
+        <svg class="w-4 h-4 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span class="text-[10px] font-medium tracking-tight">Yeni Talep</span>
+      </button>
+      <a href="#faq" id="footer-tab-faq" onclick="toggleSupportWidget(false)" class="support-footer-tab flex flex-col items-center justify-center py-1.5 rounded-xl transition cursor-pointer text-white/50 hover:text-white hover:bg-white/[0.04] border border-transparent">
+        <svg class="w-4 h-4 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="text-[10px] font-medium tracking-tight">Yardım</span>
+      </a>
+    </footer>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="./astrid.js?v=20261013_v10"></script>
+  <!-- ========================================== -->
+  <!-- FLOATING LIVE CHAT WIDGET LAUNCHER (Photo 1) -->
+  <!-- ========================================== -->
+  <div id="floating-support-bubble" class="floating-chat-bubble" onclick="toggleSupportWidget(true)">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px;">
+      <button type="button" id="floating-bubble-close-btn" onclick="event.stopPropagation(); dismissSupportBubble();" style="background: none; border: none; color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1; cursor: pointer; padding: 0 2px;" title="Kapat">✕</button>
+      <span style="font-size: 9px; font-weight: 800; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px;">CANLI DESTEK</span>
+    </div>
+    <div style="font-size: 12px; font-weight: 700; color: #ffffff; line-height: 1.3;">Merhaba, ben BadSupDev Asistanı 👋</div>
+    <div style="font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px;">Size nasıl yardımcı olabilirim?</div>
+    <div class="floating-bubble-arrow"></div>
+  </div>
+
+  <button type="button" id="floating-support-btn" onclick="toggleSupportWidget()" aria-label="Canlı Destek" title="Canlı Destek">
+    <svg id="floating-icon-chat" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    </svg>
+    <svg id="floating-icon-close" class="hidden w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <span id="floating-unread-badge" class="hidden">1</span>
+  </button>
+
+</body>
+</html>
